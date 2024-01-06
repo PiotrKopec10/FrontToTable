@@ -10,7 +10,7 @@ const HomePage = ({ navigation }) => {
     { id: '1', name: 'Danie 1', category: 'Dania główne', image: require('./photo/burger.png'), price: 15.99 },
     { id: '2', name: 'Danie 2', category: 'Zupy', image: require('./photo/pepperoni-pizza.png'), price: 12.99 },
     { id: '3', name: 'Danie 3', category: 'Przystawki', image: require('./photo/pita.png'), price: 9.99 },
-    { id: '3', name: 'Danie 3', category: 'Dodatki', image: require('./photo/pita.png'), price: 9.99 },
+    { id: '4', name: 'Danie 4', category: 'Dodatki', image: require('./photo/pita.png'), price: 8.99 },
     // Dodaj więcej pozycji menu
   ];
 
@@ -39,7 +39,11 @@ const HomePage = ({ navigation }) => {
   );
 
   const handleCategoryPress = (category) => {
-    setSelectedCategory(selectedCategory === category ? null : category);
+    if (category === 'Wszystkie dania') {
+      setSelectedCategory(null); 
+    } else {
+      setSelectedCategory(selectedCategory === category ? null : category);
+    }
   };
 
   return (
@@ -47,13 +51,14 @@ const HomePage = ({ navigation }) => {
       <View style={HomePageStyles.searchContainer}>
         <TextInput
           style={HomePageStyles.searchInput}
-          placeholder="Szukaj..."
+          placeholder="Co dziś zjemy..."
           onChangeText={(text) => setSearchQuery(text)}
           value={searchQuery}
         />
-        <Button title="Filtruj" onPress={() => console.log('Implementuj filtrowanie')} />
+        <Button title="Szukaj" onPress={() => console.log('Implementuj filtrowanie')} />
       </View>
       <View style={HomePageStyles.categoriesContainer}>
+        {renderCategoryButton('Wszystkie dania')}
         {renderCategoryButton('Dania główne')}
         {renderCategoryButton('Zupy')}
         {renderCategoryButton('Przystawki')}
