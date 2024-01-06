@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, Button, Image, TextInput } from 'react-native';
-import LoginPageStyle from './styles/LoginPageStyles'; // Popraw ścieżkę do pliku ze stylami
+import LoginPageStyle from './styles/LoginPageStyles'; 
 
 const LoginPage = ({ navigation }) => {
   const [login, setLogin] = useState('');
@@ -20,7 +20,7 @@ const LoginPage = ({ navigation }) => {
         placeholder="Login"
         onChangeText={(text) => setLogin(text)}
         value={login}
-        //WAZNE
+       
         
       />
       <TextInput
@@ -31,7 +31,9 @@ const LoginPage = ({ navigation }) => {
         value={password}
       />
       <Button
-        title="Zaloguj się"
+      style={LoginPageStyle.button}
+        title="Zaloguj się"     
+        color="#705537"       
         onPress={handleLogin}
       />
     </View>

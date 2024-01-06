@@ -5,6 +5,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#FFD983'
   },
   logo: {
     width: 100,
@@ -18,7 +19,9 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     padding: 10,
     width: 200,
+    backgroundColor:"#edc479"
   },
+ 
 });
 
 export default styles;
