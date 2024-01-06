@@ -14,7 +14,7 @@ const HomePageStyles = StyleSheet.create({
     flex: 1,
     marginRight: 8,
     padding: 8,
-    borderWidth: 1,
+    borderWidth: 2,
     borderRadius: 8,
   },
   categoriesContainer: {
@@ -26,19 +26,19 @@ const HomePageStyles = StyleSheet.create({
     flex: 1,
     marginRight: 8,
     padding: 8,
-    borderWidth: 1,
+    borderWidth: 2,
     borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
   },
   selectedCategoryButton: {
-    backgroundColor: '#888',
+    backgroundColor: 'rgba(25, 15, 30, 0.5)',
   },
   menuItemContainer: {
     flex: 1,
     margin: 8,
     padding: 16,
-    borderWidth: 1,
+    borderWidth: 2,
     borderRadius: 8,
     alignItems: 'center',
   },
@@ -56,6 +56,17 @@ const HomePageStyles = StyleSheet.create({
   menuItemPrice: {
     fontSize: 14,
     color: '#888',
+  },
+
+  logo: {
+    width: 95,
+    height: 95,  
+    alignSelf: 'flex-end', 
+  },
+  logotext: {
+    fontSize: 15,
+    fontWeight: 'bold',
+    alignSelf: 'flex-end',
   },
 });
 

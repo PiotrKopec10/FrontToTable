@@ -3,6 +3,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import HomePage from './HomePage'; 
 import LoginPage from './LoginPage';
+import CartPage from './CartPage';
+import DishDetailsPage from './DishDetailsPage';
+//import AdminPage from './AdminPage';
 
 const Stack = createStackNavigator();
 
@@ -11,7 +14,9 @@ const App = () => {
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login">
         <Stack.Screen name="Login" component={LoginPage} />
-        <Stack.Screen name="Home" component={HomePage} />
+        <Stack.Screen name="Menu" component={HomePage} />
+        <Stack.Screen name="Cart" component={CartPage} />
+        <Stack.Screen name="DishDetails" component={DishDetailsPage} />
       </Stack.Navigator>
     </NavigationContainer>
   );

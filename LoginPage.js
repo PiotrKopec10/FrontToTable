@@ -9,7 +9,7 @@ const LoginPage = ({ navigation }) => {
   const handleLogin = () => {   
     console.log('Login:', login);
     console.log('Password:', password);
-    navigation.navigate('Home');
+    navigation.navigate('Menu');
   };
 
   return (
