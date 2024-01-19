@@ -4,12 +4,7 @@ import CartPageStyles from './styles/CartPageStyles';
 
 const CartPage = () => {
   const [cartItems, setCartItems] = useState([
-    { id: '1', name: 'Danie 1', quantity: 2, price: 15.99 },
-    { id: '2', name: 'Danie 2', quantity: 1, price: 12.99 },
-    { id: '3', name: 'Danie 1', quantity: 2, price: 15.99 },
-    { id: '4', name: 'Danie 2', quantity: 1, price: 12.99 },
-    { id: '5', name: 'Danie 1', quantity: 2, price: 15.99 },
-    { id: '6', name: 'Danie 2', quantity: 1, price: 12.99 },
+//dane
   ]);
 
   const calculateTotal = () => {
@@ -65,14 +60,14 @@ const CartPage = () => {
                 <Text style={CartPageStyles.arrowButtonText}> + </Text>
               </TouchableOpacity>
             </View>
-            <Text style={CartPageStyles.itemTotal}>{`$${(item.quantity * item.price).toFixed(2)}`}</Text>
+            <Text style={CartPageStyles.itemTotal}>{`${(item.quantity * item.price).toFixed(2)}zł`}</Text>
           </View>
         )}
       />
       <View style={CartPageStyles.separator} />
       <View style={CartPageStyles.totalContainer}>
         <Text style={CartPageStyles.totalLabel}>RAZEM: </Text>
-        <Text style={CartPageStyles.totalValue}>{`$${calculateTotal().toFixed(2)}`}</Text>
+        <Text style={CartPageStyles.totalValue}>{`${calculateTotal().toFixed(2)}zł`}</Text>
       </View>
       <TouchableOpacity style={CartPageStyles.orderButton} onPress={handleOrder}>
         <Text style={CartPageStyles.orderButtonText}>ZAMAWIAM</Text>

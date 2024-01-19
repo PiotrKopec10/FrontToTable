@@ -8,9 +8,10 @@ const DishDetailsStyles = StyleSheet.create({
     backgroundColor: '#FFD983',
     position: 'relative',
   },
+
   dishImage: {
-    width: '50%',
-    height: '100%',
+    width: 500,
+    height: 500,
     resizeMode: 'contain',
   },
   detailsContainer: {
