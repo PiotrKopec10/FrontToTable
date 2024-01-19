@@ -1,16 +1,38 @@
-import React, { useState } from 'react';
-import { View, Text, Button, TouchableOpacity, FlatList, Image } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, FlatList, Image } from 'react-native';
 import HomePageStyles from './styles/HomePageStyles';
 
 const HomePage = ({ navigation }) => {
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [apiData, setApiData] = useState([]);
 
-  const menuItems = [
-    { id: '1', name: 'Danie 1', category: 'Dania główne', image: require('./photo/burger.png'), price: 15.99 },
-    { id: '2', name: 'Danie 2', category: 'Zupy', image: require('./photo/pepperoni-pizza.png'), price: 12.99 },
-    { id: '3', name: 'Danie 3', category: 'Przystawki', image: require('./photo/pita.png'), price: 9.99 },
-    { id: '4', name: 'Danie 4', category: 'Dodatki', image: require('./photo/pita.png'), price: 8.99 },
-  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://localhost:5111/api/Product', {
+          method: 'GET',
+          headers: {
+            'accept': 'text/plain',
+          },
+        });
+
+        const result = await response.json();
+        setApiData(result);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []); // Pobieranie danych przy pierwszym renderowaniu
+
+  const menuItems = apiData.map((item) => ({
+    id: item.productId.toString(),
+    name: item.productName,
+    category: item.productStatus, // Użyj nazwy produktu jako kategorii, możesz dostosować to według potrzeb
+    image: { uri: item.imageUrl }, // Użyj imageUrl jako źródło obrazu
+    price: item.productPrice,
+  }));
 
   const filteredMenuItems = selectedCategory
     ? menuItems.filter(item => item.category === selectedCategory)
@@ -23,7 +45,7 @@ const HomePage = ({ navigation }) => {
     >
       <Image source={item.image} style={HomePageStyles.menuItemImage} />
       <Text style={HomePageStyles.menuItemName}>{item.name}</Text>
-      <Text style={HomePageStyles.menuItemPrice}>{`$${item.price.toFixed(2)}`}</Text>
+      <Text style={HomePageStyles.menuItemPrice}>{`${item.price.toFixed(2)}`}</Text>
     </TouchableOpacity>
   );
 
