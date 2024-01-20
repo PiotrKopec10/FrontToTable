@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { View, Text, Button, Image, TextInput } from 'react-native';
 import LoginPageStyle from './styles/LoginPageStyles'; 
 
-
 const LoginPage = ({ navigation }) => {
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
@@ -13,7 +12,11 @@ const LoginPage = ({ navigation }) => {
     console.log('Login:', login);
     console.log('Password:', password);
     console.log('Table:', tablenr);
-    navigation.navigate('Start',{tableNr : tablenr});
+    if (login === 'lui' && password === 'lui') {
+      navigation.navigate('AdminPage');
+    } else {
+      navigation.navigate('Start', { tableNr: tablenr });
+    }
   };
   
 
@@ -25,7 +28,6 @@ const LoginPage = ({ navigation }) => {
         placeholder="Login"
         onChangeText={(text) => setLogin(text)}
         value={login}
-        
       />
       <TextInput
         style={LoginPageStyle.input}
@@ -41,7 +43,7 @@ const LoginPage = ({ navigation }) => {
         value={tablenr}
       />
       <Button
-      style={LoginPageStyle.button}
+        style={LoginPageStyle.button}
         title="Zaloguj się"     
         color="#705537"       
         onPress={handleLogin}

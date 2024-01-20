@@ -1,4 +1,3 @@
-// HomePage.js
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, FlatList, Image, ImageBackground } from 'react-native';
 import HomePageStyles from './styles/HomePageStyles';
