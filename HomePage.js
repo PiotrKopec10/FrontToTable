@@ -1,3 +1,4 @@
+// HomePage.js
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, FlatList, Image, ImageBackground } from 'react-native';
 import HomePageStyles from './styles/HomePageStyles';
@@ -44,8 +45,8 @@ const HomePage = ({ navigation }) => {
       onPress={() => navigation.navigate('DishDetails', { dishId: item.id })}
     >
       <Image source={item.image} style={HomePageStyles.menuItemImage} />
-      <Text style={HomePageStyles.menuItemName}>{item.name}</Text>
-      <Text style={HomePageStyles.menuItemPrice}>{`${item.price.toFixed(2)}`}</Text>
+      <Text style={[HomePageStyles.menuItemName, { color: 'white'}]}>{item.name}</Text>
+      <Text style={[HomePageStyles.menuItemPrice, { color: 'white', paddingBottom: 5 }]}>{`${item.price.toFixed(2)}`}</Text>
     </TouchableOpacity>
   );
 

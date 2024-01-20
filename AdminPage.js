@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, FlatList, Image, Modal, TextInput } from 'react-native';
+import { View, Text, TouchableOpacity, FlatList, Image, Modal, TextInput, ImageBackground } from 'react-native';
 import AdminPageStyles from './styles/AdminPageStyles';
 
 const AdminPage = () => {
     const [apiData, setApiData] = useState([]);
     const [isAddModalVisible, setIsAddModalVisible] = useState(false);
     const [newProduct, setNewProduct] = useState({
-        productId: 0,
         productName: '',
         productDescription: '',
         productPrice: 0,
-        productStatus: '',
         imageUrl: '',
     });
     const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
@@ -21,7 +19,6 @@ const AdminPage = () => {
         productName: '',
         productDescription: '',
         productPrice: 0,
-        productStatus: '',
         imageUrl: '',
     });
 
@@ -39,8 +36,8 @@ const AdminPage = () => {
         }
     };
 
-    const handleAddProduct = async () => {        
-        if (!newProduct.productName || !newProduct.productDescription || !newProduct.productPrice || !newProduct.imageUrl) {        
+    const handleAddProduct = async () => {
+        if (!newProduct.productName || !newProduct.productDescription || !newProduct.productPrice || !newProduct.imageUrl) {
             return;
         }
 
@@ -53,17 +50,15 @@ const AdminPage = () => {
                 body: JSON.stringify(newProduct),
             });
 
-            if (response.status === 201) {               
+            if (response.status === 201) {
                 setIsAddModalVisible(false);
                 setNewProduct({
-                    productId: 0,
                     productName: '',
                     productDescription: '',
                     productPrice: 0,
-                    productStatus: '',
                     imageUrl: '',
                 });
-                fetchData(); 
+                fetchData();
             } else {
                 console.error('Błąd podczas dodawania nowego produktu');
             }
@@ -107,7 +102,6 @@ const AdminPage = () => {
                     productName: '',
                     productDescription: '',
                     productPrice: 0,
-                    productStatus: '',
                     imageUrl: '',
                 });
                 fetchData();
@@ -122,8 +116,8 @@ const AdminPage = () => {
     const renderProductItem = ({ item }) => (
         <View style={AdminPageStyles.productItemContainer}>
             <Image source={{ uri: item.imageUrl }} style={AdminPageStyles.productImage} />
-            <Text style={AdminPageStyles.productName}>{item.productName}</Text>
-            <Text style={AdminPageStyles.productPrice}>{`${item.productPrice.toFixed(2)} PLN`}</Text>
+            <Text style={[AdminPageStyles.productName, { color: 'white' }]}>{item.productName}</Text>
+            <Text style={[AdminPageStyles.productPrice, { color: 'white', paddingBottom: 5 }]}>{`${item.productPrice.toFixed(2)} PLN`}</Text>
             <TouchableOpacity
                 style={AdminPageStyles.editButton}
                 onPress={() => {
@@ -146,21 +140,28 @@ const AdminPage = () => {
     );
 
     return (
-        <View style={AdminPageStyles.container}>
-            <Text style={AdminPageStyles.header}>Panel Admina</Text>
-            <TouchableOpacity
-                style={AdminPageStyles.addButton}
-                onPress={() => setIsAddModalVisible(true)}
-            >
-                <Text style={AdminPageStyles.addButtonText}>Dodaj nowy produkt</Text>
-            </TouchableOpacity>
+        <ImageBackground source={require('./photo/BG1.png')} style={[AdminPageStyles.container, { backgroundColor: 'rgba(255, 255, 255, 0.6)' }]}>
+            {/* Sekcja z logiem i przyciskiem "Dodaj nowy produkt" */}
+            <View style={[AdminPageStyles.sectionContainer, { backgroundColor: '#FFD983'}]}>
+                <Image source={require('./photo/logo.png')} style={[AdminPageStyles.logo, { marginBottom: 15 }]} />
+                <TouchableOpacity
+                    style={[AdminPageStyles.addButton, {margin: 15}]}
+                    onPress={() => setIsAddModalVisible(true)}
+                >
+                    <Text style={AdminPageStyles.addButtonText}>Dodaj nowy produkt</Text>
+                </TouchableOpacity>
+            </View>
 
-            <FlatList
-                data={apiData}
-                keyExtractor={(item) => item.productId.toString()}
-                renderItem={renderProductItem}
-                numColumns={2}
-            />
+            {/* Sekcja z menu produktów */}
+            <View style={AdminPageStyles.sectionContainer}>
+                {/* Sekcja z danymi */}
+                <FlatList
+                    data={apiData}
+                    keyExtractor={(item) => item.productId.toString()}
+                    renderItem={renderProductItem}
+                    numColumns={4}
+                />
+            </View>
 
             {/* Add Product Modal */}
             <Modal
@@ -200,10 +201,10 @@ const AdminPage = () => {
                         onChangeText={(text) => setNewProduct({ ...newProduct, imageUrl: text })}
                     />
                     <TouchableOpacity
-                        style={AdminPageStyles.modalButton}
+                        style={[AdminPageStyles.modalButton, {backgroundColor: '#4CAF50'}]}
                         onPress={handleAddProduct}
                     >
-                        <Text style={AdminPageStyles.modalButtonText}>Dodaj</Text>
+                        <Text style={[AdminPageStyles.modalButtonText, {backgroundColor: '#4CAF50'}]}>Dodaj</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={AdminPageStyles.modalButton}
@@ -223,12 +224,12 @@ const AdminPage = () => {
             >
                 <View style={AdminPageStyles.modalContainer}>
                     <Text style={AdminPageStyles.modalHeader}>Potwierdzenie usunięcia</Text>
-                    <Text>Czy na pewno chcesz usunąć ten produkt?</Text>
+                    <Text style={{ padding: 10 }}>Czy na pewno chcesz usunąć ten produkt?</Text>
                     <TouchableOpacity
-                        style={AdminPageStyles.modalButton}
+                        style={[AdminPageStyles.modalButton, {backgroundColor: '#FF0000'}]}
                         onPress={handleDeleteProduct}
                     >
-                        <Text style={AdminPageStyles.modalButtonText}>Usuń</Text>
+                        <Text style={[AdminPageStyles.modalButtonText, {backgroundColor: '#FF0000'}]}>Usuń</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={AdminPageStyles.modalButton}
@@ -263,10 +264,10 @@ const AdminPage = () => {
                     <TextInput
                         style={AdminPageStyles.modalTextInput}
                         placeholder="Cena produktu"
-                        value={newProduct.productPrice !== null && newProduct.productPrice !== undefined && !isNaN(newProduct.productPrice) ? newProduct.productPrice.toString() : ''}
+                        value={editProduct.productPrice !== null && editProduct.productPrice !== undefined && !isNaN(editProduct.productPrice) ? editProduct.productPrice.toString() : ''}
                         onChangeText={(text) => {
                             const parsedValue = parseFloat(text);
-                            setNewProduct({ ...newProduct, productPrice: isNaN(parsedValue) ? 0 : parsedValue });
+                            setEditProduct({ ...editProduct, productPrice: isNaN(parsedValue) ? 0 : parsedValue });
                         }}
                         keyboardType="numeric"
                     />
@@ -277,10 +278,10 @@ const AdminPage = () => {
                         onChangeText={(text) => setEditProduct({ ...editProduct, imageUrl: text })}
                     />
                     <TouchableOpacity
-                        style={AdminPageStyles.modalButton}
+                        style={[AdminPageStyles.modalButton, {backgroundColor: '#2196F3'}]}
                         onPress={handleEditProduct}
                     >
-                        <Text style={AdminPageStyles.modalButtonText}>Zapisz</Text>
+                        <Text style={[AdminPageStyles.modalButtonText, {backgroundColor: '#2196F3'}]}>Zapisz</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={AdminPageStyles.modalButton}
@@ -290,7 +291,7 @@ const AdminPage = () => {
                     </TouchableOpacity>
                 </View>
             </Modal>
-        </View>
+        </ImageBackground>
     );
 };
 

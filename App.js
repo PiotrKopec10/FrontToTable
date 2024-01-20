@@ -7,6 +7,7 @@ import CartPage from './CartPage';
 import DishDetailsPage from './DishDetailsPage';
 import StartPage from './StartPage';
 import AdminPage from './AdminPage';
+import WaiterPage from './WaiterPage'; 
 import { AuthProvider } from './AuthContext.js'; 
 
 const Stack = createStackNavigator();
@@ -22,6 +23,7 @@ const App = () => {
           <Stack.Screen name="Order" component={CartPage} />
           <Stack.Screen name="DishDetails" component={DishDetailsPage} />
           <Stack.Screen name="AdminPage" component={AdminPage}/>
+          <Stack.Screen name="WaiterPage" component={WaiterPage}/> 
         </Stack.Navigator>
       </NavigationContainer>
     </AuthProvider>

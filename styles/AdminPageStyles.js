@@ -4,18 +4,21 @@ const AdminPageStyles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor:'#FFD983'
   },
   header: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 16,
+  },
+  logo: {
+    width: 150,
+    height: 150,
+    marginBottom: 8,
+    alignSelf: 'center',
   },
   addButton: {
     padding: 8,
-    backgroundColor: '#4CAF50', 
+    backgroundColor: '#4CAF50',
     borderRadius: 8,
-    marginBottom: 16,
   },
   addButtonText: {
     color: 'white',
@@ -29,6 +32,11 @@ const AdminPageStyles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 8,
     alignItems: 'center',
+    borderColor: '#FFFFFF',
+    backgroundColor: 'rgba(255, 217, 131, 0.2)',
+  },
+  sectionContainer: {
+    marginBottom: 16,
   },
   productImage: {
     width: 100,
@@ -77,11 +85,13 @@ const AdminPageStyles = StyleSheet.create({
     marginBottom: 16,
   },
   modalTextInput: {
-    width: '80%',
+    width: 400,
     padding: 8,
     borderWidth: 1,
     borderRadius: 8,
     marginBottom: 16,
+    textAlign: 'center',
+    backgroundColor: 'rgba(25, 15, 30, 0.5)',
   },
   modalButton: {
     backgroundColor: '#4CAF50', 
@@ -94,11 +104,19 @@ const AdminPageStyles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
   },
+  modalContent: {
+    width: '80%',
+    padding: 16,
+    backgroundColor: 'white',
+    borderRadius: 8,
+    elevation: 5, 
+    alignItems: 'center',
+  },
   modalContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', 
+    backgroundColor: 'rgba(0, 0, 0, 0.3)', 
   },
   modalContent: {
     width: '80%',
@@ -114,11 +132,13 @@ const AdminPageStyles = StyleSheet.create({
     marginBottom: 16,
   },
   modalTextInput: {
-    width: '100%',
+    width: 400,
     padding: 8,
     borderWidth: 1,
     borderRadius: 8,
     marginBottom: 16,
+    textAlign: 'center',
+    backgroundColor: 'rgba(25, 15, 30, 0.3)',
   },
   modalButton: {
     backgroundColor: '#4CAF50',
@@ -136,7 +156,7 @@ const AdminPageStyles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#FFD983',
-    padding: 20
+    padding: 20,
   },
   modalContent: {
     width: '80%',
@@ -153,14 +173,16 @@ const AdminPageStyles = StyleSheet.create({
     textAlign: 'center',
   },
   modalTextInput: {
-    width: '100%',
+    width: 400,
     padding: 12,
     borderWidth: 1,
     borderRadius: 8,
     marginBottom: 16,
+    textAlign: 'center',
+    backgroundColor: 'rgba(25, 15, 30, 0.3)',
   },
   modalButton: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#171716',
     padding: 12,
     borderRadius: 8,
     marginBottom: 8,

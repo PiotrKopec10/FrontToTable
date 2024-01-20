@@ -7,7 +7,9 @@ export const AuthProvider = ({ children }) => {
 
   const login = (credentials) => {
     if (credentials.username === 'lui' && credentials.password === 'lui') {
-      setUser({ username: credentials.username });
+      setUser({ username: credentials.username, role: 'admin' });
+    } else if (credentials.username === 'waiter' && credentials.password === 'waiter') {
+      setUser({ username: credentials.username, role: 'waiter' });
     }
   };
 

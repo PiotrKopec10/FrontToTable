@@ -29,9 +29,8 @@ const CartPageStyles = StyleSheet.create({
     fontWeight: 'bold',
   },
   columnName: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    // backgroundColor: 'rgba(25, 15, 30, 0.5)',
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   quantityContainer: {
     flexDirection: 'row',
@@ -45,22 +44,18 @@ const CartPageStyles = StyleSheet.create({
     borderWidth: 1.5,
     borderRadius: 5,
     textAlign: 'center',
+    marginLeft: 6,
+    marginRight: 6,
   },
   arrowButton: {
     paddingHorizontal: 8,
     backgroundColor: '#171716',
     borderRadius: 5,
-    marginLeft: 6,
-    marginRight: 6,
   },
   arrowButtonText: {
     color: 'white',
     fontWeight: 'bold',
     fontSize: 18,
-  },
-  itemPrice: {
-    fontSize: 18,
-    color: '#171716',
   },
   itemTotal: {
     fontSize: 18,
@@ -79,6 +74,7 @@ const CartPageStyles = StyleSheet.create({
     fontSize: 28,
     fontWeight: 'bold',
     color: '#171716',
+    paddingBottom: 10, // Dodano margines dolny
   },
   orderButton: {
     marginTop: 16,
@@ -104,11 +100,62 @@ const CartPageStyles = StyleSheet.create({
     fontSize: 14,
   },
   dishImage: {
-    width: 50, // Dostosowano szerokość obrazu
-    height: 50, // Dostosowano wysokość obrazu
+    width: 50,
+    height: 50,
     resizeMode: 'contain',
     marginRight: 10,
   },
+  // Nowe style dla Modalu
+  paymentModalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalHeader: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    color: 'white',
+  },
+  paymentMethodButton: {
+    backgroundColor: '#171716',
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 16,
+    flexDirection: 'row', // Dodano flex-direction dla obrazka i tekstu obok siebie
+    alignItems: 'center',
+  },
+  paymentMethodImage: {
+    width: 24,
+    height: 24,
+    marginRight: 10,
+  },
+  paymentMethodButtonText: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  modalButton: {
+    backgroundColor: '#FFD983',
+    padding: 12,
+    borderRadius: 8,
+    marginTop: 16,
+  },
+  modalButtonText: {
+    color: '#171716',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  blikCodeInput: {
+    width: 200,
+    height: 40,
+    textAlign: 'center',
+    borderWidth: 1.5,
+    borderRadius: 5,
+    marginBottom: 10,
+    paddingLeft: 10,
+  }
 });
 
 export default CartPageStyles;
