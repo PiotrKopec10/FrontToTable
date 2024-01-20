@@ -74,7 +74,7 @@ const CartPageStyles = StyleSheet.create({
     fontSize: 28,
     fontWeight: 'bold',
     color: '#171716',
-    paddingBottom: 10, // Dodano margines dolny
+    paddingBottom: 10, 
   },
   orderButton: {
     marginTop: 16,
@@ -105,12 +105,11 @@ const CartPageStyles = StyleSheet.create({
     resizeMode: 'contain',
     marginRight: 10,
   },
-  // Nowe style dla Modalu
   paymentModalContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(0, 0, 0, 0.75)',
   },
   modalHeader: {
     fontSize: 24,
@@ -123,7 +122,7 @@ const CartPageStyles = StyleSheet.create({
     padding: 12,
     borderRadius: 8,
     marginBottom: 16,
-    flexDirection: 'row', // Dodano flex-direction dla obrazka i tekstu obok siebie
+    flexDirection: 'row', 
     alignItems: 'center',
   },
   paymentMethodImage: {
@@ -155,6 +154,7 @@ const CartPageStyles = StyleSheet.create({
     borderRadius: 5,
     marginBottom: 10,
     paddingLeft: 10,
+    color:'#FFFFFF'
   }
 });
 

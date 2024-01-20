@@ -1,4 +1,3 @@
-// DishDetails.js
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, Image, ImageBackground } from 'react-native';
 import DishDetailsStyles from './styles/DishDetailsStyles';
@@ -23,7 +22,7 @@ const DishDetails = ({ route, navigation }) => {
           const response = await fetch(`http://localhost:5111/api/Product/${dishId}`);
           if (response.ok) {
             const data = await response.json();
-            console.log('Dish details:', data); // Dodaj ten log
+            console.log('Dish details:', data); 
             setDishDetails({
               id: data.productId,
               name: data.productName,
@@ -45,7 +44,6 @@ const DishDetails = ({ route, navigation }) => {
 
   const handleOrder = async () => {
     try {
-      // Kod obsługi zamówienia
     } catch (error) {
       console.error('Błąd wykonania żądania:', error.message);
     }

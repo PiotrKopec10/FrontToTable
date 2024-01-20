@@ -1,4 +1,3 @@
-// HomePageStyles.js
 import { StyleSheet } from 'react-native';
 
 const HomePageStyles = StyleSheet.create({
@@ -12,12 +11,11 @@ const HomePageStyles = StyleSheet.create({
   menuContainer: {
     flex: 1,
     padding: 16,
-    backgroundColor: 'transparent', // Ustawiamy tło na przeźroczyste
+    backgroundColor: 'transparent', 
   },
   footerContainer: {
     padding: 16,
     alignItems: 'flex-end',
-    // Usuwamy backgroundColor, aby sekcja zamówienia nie miała tła
   },
   searchContainer: {
     flexDirection: 'row',
@@ -50,7 +48,7 @@ const HomePageStyles = StyleSheet.create({
   },
   categoryButtonText: {
     fontSize: 16,
-    fontWeight: 'bold', // Tekst w kategoriach jest pogrubiony
+    fontWeight: 'bold', 
   },
   menuItemContainer: {
     flex: 1,
@@ -59,8 +57,8 @@ const HomePageStyles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 8,
     alignItems: 'center',
-    borderColor: '#FFD983', // Kolor obramowania dania
-    backgroundColor: 'rgba(255, 217, 131, 0.2)', // Kolor tła dania z przerzuczystością 50%
+    borderColor: '#FFD983', 
+    backgroundColor: 'rgba(255, 217, 131, 0.2)', 
   },
   menuItemImage: {
     width: 100,
@@ -72,7 +70,7 @@ const HomePageStyles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 8,
-    color: '#FFD983', // Kolor tekstu dania
+    color: '#FFD983', 
   },
   menuItemPrice: {
     fontSize: 14,

@@ -1,4 +1,3 @@
-// DishDetailsStyles.js
 import { StyleSheet } from 'react-native';
 
 const DishDetailsStyles = StyleSheet.create({
