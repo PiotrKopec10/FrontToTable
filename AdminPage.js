@@ -116,8 +116,8 @@ const AdminPage = () => {
     const renderProductItem = ({ item }) => (
         <View style={AdminPageStyles.productItemContainer}>
             <Image source={{ uri: item.imageUrl }} style={AdminPageStyles.productImage} />
-            <Text style={AdminPageStyles.productName}>{item.productName}</Text>
-            <Text style={AdminPageStyles.productPrice}>{`${item.productPrice.toFixed(2)} PLN`}</Text>
+            <Text style={[AdminPageStyles.productName, { color: 'white' }]}>{item.productName}</Text>
+            <Text style={[AdminPageStyles.productPrice, { color: 'white', paddingBottom: 5 }]}>{`${item.productPrice.toFixed(2)} PLN`}</Text>
             <TouchableOpacity
                 style={AdminPageStyles.editButton}
                 onPress={() => {
@@ -201,10 +201,10 @@ const AdminPage = () => {
                         onChangeText={(text) => setNewProduct({ ...newProduct, imageUrl: text })}
                     />
                     <TouchableOpacity
-                        style={AdminPageStyles.modalButton}
+                        style={[AdminPageStyles.modalButton, {backgroundColor: '#4CAF50'}]}
                         onPress={handleAddProduct}
                     >
-                        <Text style={AdminPageStyles.modalButtonText}>Dodaj</Text>
+                        <Text style={[AdminPageStyles.modalButtonText, {backgroundColor: '#4CAF50'}]}>Dodaj</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={AdminPageStyles.modalButton}
@@ -224,12 +224,12 @@ const AdminPage = () => {
             >
                 <View style={AdminPageStyles.modalContainer}>
                     <Text style={AdminPageStyles.modalHeader}>Potwierdzenie usunięcia</Text>
-                    <Text>Czy na pewno chcesz usunąć ten produkt?</Text>
+                    <Text style={{ padding: 10 }}>Czy na pewno chcesz usunąć ten produkt?</Text>
                     <TouchableOpacity
-                        style={AdminPageStyles.modalButton}
+                        style={[AdminPageStyles.modalButton, {backgroundColor: '#FF0000'}]}
                         onPress={handleDeleteProduct}
                     >
-                        <Text style={AdminPageStyles.modalButtonText}>Usuń</Text>
+                        <Text style={[AdminPageStyles.modalButtonText, {backgroundColor: '#FF0000'}]}>Usuń</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={AdminPageStyles.modalButton}
@@ -278,10 +278,10 @@ const AdminPage = () => {
                         onChangeText={(text) => setEditProduct({ ...editProduct, imageUrl: text })}
                     />
                     <TouchableOpacity
-                        style={AdminPageStyles.modalButton}
+                        style={[AdminPageStyles.modalButton, {backgroundColor: '#2196F3'}]}
                         onPress={handleEditProduct}
                     >
-                        <Text style={AdminPageStyles.modalButtonText}>Zapisz</Text>
+                        <Text style={[AdminPageStyles.modalButtonText, {backgroundColor: '#2196F3'}]}>Zapisz</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={AdminPageStyles.modalButton}

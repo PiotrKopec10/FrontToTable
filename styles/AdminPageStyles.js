@@ -85,11 +85,13 @@ const AdminPageStyles = StyleSheet.create({
     marginBottom: 16,
   },
   modalTextInput: {
-    width: '80%',
+    width: 400,
     padding: 8,
     borderWidth: 1,
     borderRadius: 8,
     marginBottom: 16,
+    textAlign: 'center',
+    backgroundColor: 'rgba(25, 15, 30, 0.5)',
   },
   modalButton: {
     backgroundColor: '#4CAF50', 
@@ -114,7 +116,7 @@ const AdminPageStyles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', 
+    backgroundColor: 'rgba(0, 0, 0, 0.3)', 
   },
   modalContent: {
     width: '80%',
@@ -130,11 +132,13 @@ const AdminPageStyles = StyleSheet.create({
     marginBottom: 16,
   },
   modalTextInput: {
-    width: '100%',
+    width: 400,
     padding: 8,
     borderWidth: 1,
     borderRadius: 8,
     marginBottom: 16,
+    textAlign: 'center',
+    backgroundColor: 'rgba(25, 15, 30, 0.3)',
   },
   modalButton: {
     backgroundColor: '#4CAF50',
@@ -169,14 +173,16 @@ const AdminPageStyles = StyleSheet.create({
     textAlign: 'center',
   },
   modalTextInput: {
-    width: '100%',
+    width: 400,
     padding: 12,
     borderWidth: 1,
     borderRadius: 8,
     marginBottom: 16,
+    textAlign: 'center',
+    backgroundColor: 'rgba(25, 15, 30, 0.3)',
   },
   modalButton: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#171716',
     padding: 12,
     borderRadius: 8,
     marginBottom: 8,
