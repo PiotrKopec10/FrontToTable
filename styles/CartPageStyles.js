@@ -26,17 +26,13 @@ const CartPageStyles = StyleSheet.create({
   },
   columnHeader: {
     fontSize: 18,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
     fontWeight: 'bold',
   },
-
   columnName: {
-    fontSize: 2,
+    fontSize: 18,
     fontWeight: 'bold',
+    // backgroundColor: 'rgba(25, 15, 30, 0.5)',
   },
-
   quantityContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -77,10 +73,12 @@ const CartPageStyles = StyleSheet.create({
   totalLabel: {
     fontSize: 28,
     fontWeight: 'bold',
+    color: '#171716',
   },
   totalValue: {
     fontSize: 28,
     fontWeight: 'bold',
+    color: '#171716',
   },
   orderButton: {
     marginTop: 16,
@@ -93,6 +91,23 @@ const CartPageStyles = StyleSheet.create({
     color: 'white',
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  noteButton: {
+    backgroundColor: '#FFD983',
+    padding: 8,
+    borderRadius: 5,
+    marginLeft: 10,
+  },
+  noteButtonText: {
+    color: '#171716',
+    fontWeight: 'bold',
+    fontSize: 14,
+  },
+  dishImage: {
+    width: 50, // Dostosowano szerokość obrazu
+    height: 50, // Dostosowano wysokość obrazu
+    resizeMode: 'contain',
+    marginRight: 10,
   },
 });
 

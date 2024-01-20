@@ -1,6 +1,8 @@
+// DishDetails.js
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, Image } from 'react-native';
+import { View, Text, TouchableOpacity, Image, ImageBackground } from 'react-native';
 import DishDetailsStyles from './styles/DishDetailsStyles';
+import HomePageStyles from './styles/HomePageStyles';
 
 const DishDetails = ({ route, navigation }) => {
   const { dishId } = route.params || {};
@@ -21,6 +23,7 @@ const DishDetails = ({ route, navigation }) => {
           const response = await fetch(`http://localhost:5111/api/Product/${dishId}`);
           if (response.ok) {
             const data = await response.json();
+            console.log('Dish details:', data); // Dodaj ten log
             setDishDetails({
               id: data.productId,
               name: data.productName,
@@ -42,55 +45,7 @@ const DishDetails = ({ route, navigation }) => {
 
   const handleOrder = async () => {
     try {
-      // Tworzenie zamówienia
-      const createOrderResponse = await fetch('http://localhost:5111/api/Order', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          // Dodać ewentualne dane potrzebne do utworzenia zamówienia
-        }),
-      });
-
-      if (createOrderResponse.ok) {
-        const createOrderData = await createOrderResponse.json();
-
-        if (createOrderData.orderId) {
-          console.log('Order created. Order ID:', createOrderData.orderId);
-
-          // Dodawanie produktu do zamówienia
-          const orderItemResponse = await fetch('http://localhost:5111/api/OrderItem', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              "orderItemId": createOrderData.orderId, // Ustawienie orderId z poprzedniego zapytania
-              "productId": dishDetails.id,
-              "itemQuantity": 1,
-            }),
-          });
-
-          if (orderItemResponse.ok) {
-            const orderItemData = await orderItemResponse.json();
-
-            if (orderItemData.orderItemId) {
-              console.log('Order Item added. Order Item ID:', orderItemData.orderItemId);
-              setOrderItemCreated(true);
-              navigation.navigate('HomePage', { orderItemCreated: true });
-            } else {
-              console.error('Błąd dodawania produktu do zamówienia. Brak poprawnych danych w odpowiedzi.');
-            }
-          } else {
-            console.error('Błąd dodawania produktu do zamówienia:', orderItemResponse.statusText);
-          }
-        } else {
-          console.error('Błąd tworzenia zamówienia. Brak poprawnych danych w odpowiedzi.');
-        }
-      } else {
-        console.error('Błąd tworzenia zamówienia:', createOrderResponse.statusText);
-      }
+      // Kod obsługi zamówienia
     } catch (error) {
       console.error('Błąd wykonania żądania:', error.message);
     }
@@ -101,25 +56,45 @@ const DishDetails = ({ route, navigation }) => {
   };
 
   return (
-    <View style={DishDetailsStyles.container}>
-      <Image source={dishDetails.image && dishDetails.image.uri ? { uri: dishDetails.image.uri } : null} style={DishDetailsStyles.dishImage} />
-      <View style={DishDetailsStyles.detailsContainer}>
-        <Text style={DishDetailsStyles.dishName}>{dishDetails.name}</Text>
-        <Text style={DishDetailsStyles.dishCategory}>{dishDetails.category}</Text>
-        <Text style={DishDetailsStyles.dishPrice}>{`${dishDetails.price.toFixed(2)}zł`}</Text>
-        {dishDetails.additionalInfo && (
-          <Text style={DishDetailsStyles.additionalInfo}>{dishDetails.additionalInfo}</Text>
-        )}
+    <ImageBackground source={require('./photo/BG1.png')} style={DishDetailsStyles.container}>
+      {/* Sekcja Logo */}
+      <View style={[HomePageStyles.sectionContainer, HomePageStyles.headerContainer]}>
+        <View style={HomePageStyles.orderContainer}>
+          <Image source={require('./photo/logo.png')} style={[HomePageStyles.order, { marginBottom: 15 }]} />
+        </View>
       </View>
-      <TouchableOpacity onPress={handleOrder} style={DishDetailsStyles.addToMenuButton}>
-        <Image source={require('./photo/add.png')} style={DishDetailsStyles.photo} />
-        <Text style={DishDetailsStyles.addToMenuText}>Dodaj do menu</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={handleGoBack} style={DishDetailsStyles.goBackButton}>
-        <Image source={require('./photo/back.png')} style={DishDetailsStyles.backIcon} />
-        <Text style={DishDetailsStyles.addToMenuText}>Powrót do Menu</Text>
-      </TouchableOpacity>
-    </View>
+  
+      {/* Sekcja Dania */}
+      <View style={DishDetailsStyles.dishSectionContainer}>
+        <View style={DishDetailsStyles.dishImageContainer}>
+          <View style={DishDetailsStyles.dishImageWrapper}>
+            <Image source={dishDetails.image && dishDetails.image.uri ? { uri: dishDetails.image.uri } : null} style={DishDetailsStyles.dishImage} />
+          </View>
+          <View style={DishDetailsStyles.dishInfoContainer}>
+            <View style={DishDetailsStyles.dishBorder}>
+              <Text style={DishDetailsStyles.dishPrice}>{`${dishDetails.price.toFixed(2)}zł`}</Text>
+              <Text style={DishDetailsStyles.dishName}>{dishDetails.name}</Text>
+              <Text style={DishDetailsStyles.dishCategory}>{dishDetails.category}</Text>
+              {dishDetails.additionalInfo && (
+                <Text style={DishDetailsStyles.additionalInfo}>{dishDetails.additionalInfo}</Text>
+              )}
+            </View>
+          </View>
+        </View>
+        
+        {/* Przycisk Zamówienia */}
+        <TouchableOpacity onPress={handleOrder} style={DishDetailsStyles.addToMenuButton}>
+          <Image source={require('./photo/add.png')} style={DishDetailsStyles.photo} tintColor="#FFD983"/>
+          <Text style={[DishDetailsStyles.addToMenuText, { color: '#FFD983' }]}>Dodaj do Zamówienia</Text>
+        </TouchableOpacity>
+  
+        {/* Przycisk Powrotu do Menu */}
+        <TouchableOpacity onPress={handleGoBack} style={DishDetailsStyles.goBackButton}>
+          <Image source={require('./photo/back.png')} style={DishDetailsStyles.backIcon} tintColor="#FFD983" />
+          <Text style={[DishDetailsStyles.addToMenuText, { color: '#FFD983' }]}>Powrót do Menu</Text>
+        </TouchableOpacity>
+      </View>
+    </ImageBackground>
   );
 };
 
