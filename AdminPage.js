@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, FlatList, Image, Modal, TextInput } from 'react-native';
+import { View, Text, TouchableOpacity, FlatList, Image, Modal, TextInput, ImageBackground } from 'react-native';
 import AdminPageStyles from './styles/AdminPageStyles';
 
 const AdminPage = () => {
     const [apiData, setApiData] = useState([]);
     const [isAddModalVisible, setIsAddModalVisible] = useState(false);
     const [newProduct, setNewProduct] = useState({
-        productId: 0,
         productName: '',
         productDescription: '',
         productPrice: 0,
-        productStatus: '',
         imageUrl: '',
     });
     const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
@@ -21,7 +19,6 @@ const AdminPage = () => {
         productName: '',
         productDescription: '',
         productPrice: 0,
-        productStatus: '',
         imageUrl: '',
     });
 
@@ -39,8 +36,8 @@ const AdminPage = () => {
         }
     };
 
-    const handleAddProduct = async () => {        
-        if (!newProduct.productName || !newProduct.productDescription || !newProduct.productPrice || !newProduct.imageUrl) {        
+    const handleAddProduct = async () => {
+        if (!newProduct.productName || !newProduct.productDescription || !newProduct.productPrice || !newProduct.imageUrl) {
             return;
         }
 
@@ -53,17 +50,15 @@ const AdminPage = () => {
                 body: JSON.stringify(newProduct),
             });
 
-            if (response.status === 201) {               
+            if (response.status === 201) {
                 setIsAddModalVisible(false);
                 setNewProduct({
-                    productId: 0,
                     productName: '',
                     productDescription: '',
                     productPrice: 0,
-                    productStatus: '',
                     imageUrl: '',
                 });
-                fetchData(); 
+                fetchData();
             } else {
                 console.error('Błąd podczas dodawania nowego produktu');
             }
@@ -107,7 +102,6 @@ const AdminPage = () => {
                     productName: '',
                     productDescription: '',
                     productPrice: 0,
-                    productStatus: '',
                     imageUrl: '',
                 });
                 fetchData();
@@ -146,21 +140,28 @@ const AdminPage = () => {
     );
 
     return (
-        <View style={AdminPageStyles.container}>
-            <Text style={AdminPageStyles.header}>Panel Admina</Text>
-            <TouchableOpacity
-                style={AdminPageStyles.addButton}
-                onPress={() => setIsAddModalVisible(true)}
-            >
-                <Text style={AdminPageStyles.addButtonText}>Dodaj nowy produkt</Text>
-            </TouchableOpacity>
+        <ImageBackground source={require('./photo/BG1.png')} style={[AdminPageStyles.container, { backgroundColor: 'rgba(255, 255, 255, 0.6)' }]}>
+            {/* Sekcja z logiem i przyciskiem "Dodaj nowy produkt" */}
+            <View style={[AdminPageStyles.sectionContainer, { backgroundColor: '#FFD983'}]}>
+                <Image source={require('./photo/logo.png')} style={[AdminPageStyles.logo, { marginBottom: 15 }]} />
+                <TouchableOpacity
+                    style={[AdminPageStyles.addButton, {margin: 15}]}
+                    onPress={() => setIsAddModalVisible(true)}
+                >
+                    <Text style={AdminPageStyles.addButtonText}>Dodaj nowy produkt</Text>
+                </TouchableOpacity>
+            </View>
 
-            <FlatList
-                data={apiData}
-                keyExtractor={(item) => item.productId.toString()}
-                renderItem={renderProductItem}
-                numColumns={2}
-            />
+            {/* Sekcja z menu produktów */}
+            <View style={AdminPageStyles.sectionContainer}>
+                {/* Sekcja z danymi */}
+                <FlatList
+                    data={apiData}
+                    keyExtractor={(item) => item.productId.toString()}
+                    renderItem={renderProductItem}
+                    numColumns={4}
+                />
+            </View>
 
             {/* Add Product Modal */}
             <Modal
@@ -263,10 +264,10 @@ const AdminPage = () => {
                     <TextInput
                         style={AdminPageStyles.modalTextInput}
                         placeholder="Cena produktu"
-                        value={newProduct.productPrice !== null && newProduct.productPrice !== undefined && !isNaN(newProduct.productPrice) ? newProduct.productPrice.toString() : ''}
+                        value={editProduct.productPrice !== null && editProduct.productPrice !== undefined && !isNaN(editProduct.productPrice) ? editProduct.productPrice.toString() : ''}
                         onChangeText={(text) => {
                             const parsedValue = parseFloat(text);
-                            setNewProduct({ ...newProduct, productPrice: isNaN(parsedValue) ? 0 : parsedValue });
+                            setEditProduct({ ...editProduct, productPrice: isNaN(parsedValue) ? 0 : parsedValue });
                         }}
                         keyboardType="numeric"
                     />
@@ -290,7 +291,7 @@ const AdminPage = () => {
                     </TouchableOpacity>
                 </View>
             </Modal>
-        </View>
+        </ImageBackground>
     );
 };
 

@@ -13,9 +13,18 @@ const LoginPage = ({ navigation }) => {
     console.log('Login:', login);
     console.log('Password:', password);
     console.log('Table:', tablenr);
-    navigation.navigate('Start',{tableNr : tablenr});
+    if (login === 'lui' && password === 'lui') {
+      navigation.navigate('AdminPage');
+    }else if(login ==='waiter'&& password === 'waiter')
+    {
+      navigation.navigate('WaiterPage')
+    } 
+    else {
+      navigation.navigate('Start', { tableNr: tablenr });
+    }
   };
   
+
 
   return (
     <View style={LoginPageStyle.container}>   
