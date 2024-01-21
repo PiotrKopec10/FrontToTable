@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, TouchableWithoutFeedback, ImageBackground, TouchableOpacity } from 'react-native';
 import WaiterPageStyles from './styles/WaiterPageStyles';
+import config  from './config';
 
 const WaiterPage = () => {
     const [orders, setOrders] = useState([]);
@@ -9,7 +10,7 @@ const WaiterPage = () => {
     useEffect(() => {
         const fetchOrders = async () => {
             try {
-                const response = await fetch('http://localhost:5111/api/Order');
+                const response = await fetch(config.endpoints.Order);
                 const result = await response.json();
                 result.sort((a, b) => {
                     if (a.orderStatus === b.orderStatus) {
@@ -44,7 +45,7 @@ const WaiterPage = () => {
     const acceptOrder = async (orderId) => {
         try {
             console.log('Próba akceptacji zamówienia o ID:', orderId);
-            await fetch(`http://localhost:5111/api/Order/${orderId}`, {
+            await fetch(`${config.endpoints.Order}/${orderId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -53,7 +54,7 @@ const WaiterPage = () => {
  
             });
             
-            const response = await fetch('http://localhost:5111/api/Order');
+            const response = await fetch(config.endpoints.Order);
             const result = await response.json();
             result.sort((a, b) => {
                 if (a.orderStatus === b.orderStatus) {

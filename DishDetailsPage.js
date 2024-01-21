@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, Image, ImageBackground } from 'react-native';
 import DishDetailsStyles from './styles/DishDetailsStyles';
 import HomePageStyles from './styles/HomePageStyles';
+import config  from './config';
+
 
 const DishDetails = ({ route, navigation }) => {
   const { dishId } = route.params || {};
@@ -19,7 +21,7 @@ const DishDetails = ({ route, navigation }) => {
     if (dishId) {
       const getDishDetailsById = async () => {
         try {
-          const response = await fetch(`http://localhost:5111/api/Product/${dishId}`);
+          const response = await fetch(`${config.endpoints.Product}/${dishId}`);
           if (response.ok) {
             const data = await response.json();
             console.log('Dish details:', data); 

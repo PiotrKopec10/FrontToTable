@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, FlatList, Image, ImageBackground } from 'react-native';
 import HomePageStyles from './styles/HomePageStyles';
+import config  from './config';
 
 const HomePage = ({ navigation }) => {
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -9,7 +10,7 @@ const HomePage = ({ navigation }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:5111/api/Product', {
+        const response = await fetch(config.endpoints.Product, {
           method: 'GET',
           headers: {
             'accept': 'text/plain',

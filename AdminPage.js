@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, FlatList, Image, Modal, TextInput, ImageBackground } from 'react-native';
 import AdminPageStyles from './styles/AdminPageStyles';
+import config  from './config';
 
 const AdminPage = () => {
     const [apiData, setApiData] = useState([]);
@@ -28,7 +29,7 @@ const AdminPage = () => {
 
     const fetchData = async () => {
         try {
-            const response = await fetch('http://localhost:5111/api/Product');
+            const response = await fetch();
             const result = await response.json();
             setApiData(result);
         } catch (error) {
@@ -42,7 +43,7 @@ const AdminPage = () => {
         }
 
         try {
-            const response = await fetch('http://localhost:5111/api/Product', {
+            const response = await fetch(config.endpoints.Product, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -69,7 +70,7 @@ const AdminPage = () => {
 
     const handleDeleteProduct = async () => {
         try {
-            const response = await fetch(`http://localhost:5111/api/Product/${deleteProductId}`, {
+            const response = await fetch(`${config.endpoints.Product}/${deleteProductId}`, {
                 method: 'DELETE',
             });
 
@@ -87,7 +88,7 @@ const AdminPage = () => {
 
     const handleEditProduct = async () => {
         try {
-            const response = await fetch(`http://localhost:5111/api/Product/${editProduct.productId}`, {
+            const response = await fetch(`${config.endpoints.Product}/${editProduct.productId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
