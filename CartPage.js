@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, FlatList } from 'react-native';
 import CartPageStyles from './styles/CartPageStyles';
@@ -7,6 +8,39 @@ const CartPage = () => {
 //dane
   ]);
 
+=======
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, TouchableOpacity, FlatList, Image, Modal } from 'react-native';
+import CartPageStyles from './styles/CartPageStyles';
+import HomePageStyles from './styles/HomePageStyles';
+
+const CartPage = ({ route }) => {
+  const { orderId } = route.params;
+  console.log(orderId);
+  const [cartItems, setCartItems] = useState([]);
+  const [isPaymentModalVisible, setIsPaymentModalVisible] = useState(false);
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('');
+  const [isPaymentConfirmationModalVisible, setIsPaymentConfirmationModalVisible] = useState(false);
+
+  useEffect(() => {
+    // Pobierz produkty dla danego zamówienia z orderId i ustaw je w stanie
+    const fetchOrderItems = async () => {
+      try {
+        const response = await fetch(`http://localhost:5111/api/OrderItem/AllItems?orderId=${orderId}`);
+        if (response.ok) {
+          const orderItems = await response.json();
+          setCartItems(orderItems);
+        } else {
+          console.error('Błąd podczas pobierania produktów z zamówienia.');
+        }
+      } catch (error) {
+        console.error('Błąd wykonania żądania:', error.message);
+      }
+    };
+
+    fetchOrderItems();
+  }, [orderId]);
+>>>>>>> Stashed changes
   const calculateTotal = () => {
     return cartItems.reduce((total, item) => total + item.quantity * item.price, 0);
   };

@@ -1,8 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, FlatList, Image } from 'react-native';
 import HomePageStyles from './styles/HomePageStyles';
+<<<<<<< Updated upstream
 
 const HomePage = ({ navigation }) => {
+=======
+import config  from './config';
+const HomePage = ({route,  navigation }) => {
+  const { orderId } = route.params;
+>>>>>>> Stashed changes
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [apiData, setApiData] = useState([]);
 
@@ -41,7 +47,7 @@ const HomePage = ({ navigation }) => {
   const renderItem = ({ item }) => (
     <TouchableOpacity
       style={HomePageStyles.menuItemContainer}
-      onPress={() => navigation.navigate('DishDetails', { dishId: item.id })}
+      onPress={() => navigation.navigate('DishDetails', { dishId: item.id,orderId: orderId})}
     >
       <Image source={item.image} style={HomePageStyles.menuItemImage} />
       <Text style={HomePageStyles.menuItemName}>{item.name}</Text>
@@ -66,8 +72,14 @@ const HomePage = ({ navigation }) => {
     }
   };
 
+<<<<<<< Updated upstream
   const handleLogoClick = () => {
     navigation.navigate('Cart');
+=======
+
+  const handleOrderPress = () => {
+    navigation.navigate('Order',{orderId: orderId});
+>>>>>>> Stashed changes
   };
 
   return (

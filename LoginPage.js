@@ -7,13 +7,30 @@ const LoginPage = ({ navigation }) => {
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
   const [tablenr, setTableNr] = useState('');
+  const [restaurantnr, setRestaurantNr] = useState('');
+
+ 
 
   const handleLogin = () => {   
-    const orderItemId = 0;
+    setRestaurantNr(4)
     console.log('Login:', login);
     console.log('Password:', password);
     console.log('Table:', tablenr);
+<<<<<<< Updated upstream
     navigation.navigate('Start',{tableNr : tablenr});
+=======
+    console.log('Restaurant:', restaurantnr);
+
+    if (login === 'lui' && password === 'lui') {
+      navigation.navigate('AdminPage');
+    }else if(login ==='waiter'&& password === 'waiter')
+    {
+      navigation.navigate('WaiterPage')
+    } 
+    else {
+      navigation.navigate('Start', { tableNr: tablenr ,RestaurantNr: restaurantnr});
+    }
+>>>>>>> Stashed changes
   };
   
 
@@ -48,6 +65,7 @@ const LoginPage = ({ navigation }) => {
       />
     </View>
   );
+  
 };
 
 export default LoginPage;
