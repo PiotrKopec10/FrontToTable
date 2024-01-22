@@ -6,7 +6,7 @@ import config  from './config';
 
 
 const DishDetails = ({ route, navigation }) => {
-  const { dishId } = route.params || {};
+  const { dishId,orderId} = route.params || {};
   const [dishDetails, setDishDetails] = useState({
     id: 0,
     name: '',
@@ -15,7 +15,6 @@ const DishDetails = ({ route, navigation }) => {
     price: 0,
     additionalInfo: '',
   });
-  const [orderItemCreated, setOrderItemCreated] = useState(false);
 
   useEffect(() => {
     if (dishId) {
@@ -46,13 +45,48 @@ const DishDetails = ({ route, navigation }) => {
 
   const handleOrder = async () => {
     try {
+
+      if (!orderId || !dishId) {
+        console.error('orderId or dishId is missing.');
+        alert('Błąd podczas zamawiania. Spróbuj ponownie.');
+        return;
+      }
+  
+      // Przygotowanie danych do wysłania
+      const orderItem = {
+        itemId: 0,  // Ustaw odpowiednie id
+        itemQuantity: 1,  // Ustaw odpowiednią ilość
+        itemPrice: dishDetails.price,  // Ustaw odpowiednią cenę
+        productId: dishId,  // Ustaw odpowiedni id produktu
+        orderId: orderId,  // Ustaw odpowiednie id zamówienia
+      };
+  
+      // Wywołanie POST na endpoint /api/OrderItem/ProductToOrder
+      const response = await fetch('http://localhost:5111/api/OrderItem/ProductToOrder', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ orderItem }), // Zmiana formatu na pojedynczy obiekt
+      });
+  
+      if (response.ok) {
+        // Przetwarzanie odpowiedzi, jeśli to konieczne
+        console.log('Zamówienie produktów pomyślnie dodane do zamówienia.');
+      } else {
+        const errorMessage = await response.text();
+        console.error('Błąd podczas dodawania produktów do zamówienia:', errorMessage);
+        alert('Błąd podczas dodawania produktów do zamówienia. Spróbuj ponownie.');
+      }
     } catch (error) {
       console.error('Błąd wykonania żądania:', error.message);
+      alert('Wystąpił błąd. Spróbuj ponownie.');
     }
   };
+  
 
   const handleGoBack = () => {
-    navigation.navigate('Menu');
+    navigation.navigate('Menu',{orderId:orderId});
   };
 
   return (
