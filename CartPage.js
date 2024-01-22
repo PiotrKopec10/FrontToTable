@@ -1,14 +1,3 @@
-<<<<<<< Updated upstream
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, FlatList } from 'react-native';
-import CartPageStyles from './styles/CartPageStyles';
-
-const CartPage = () => {
-  const [cartItems, setCartItems] = useState([
-//dane
-  ]);
-
-=======
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, FlatList, Image, Modal } from 'react-native';
 import CartPageStyles from './styles/CartPageStyles';
@@ -40,7 +29,6 @@ const CartPage = ({ route }) => {
 
     fetchOrderItems();
   }, [orderId]);
->>>>>>> Stashed changes
   const calculateTotal = () => {
     return cartItems.reduce((total, item) => total + item.quantity * item.price, 0);
   };

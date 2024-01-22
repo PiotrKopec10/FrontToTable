@@ -41,10 +41,6 @@ const DishDetails = ({ route, navigation }) => {
 
   const handleOrder = async () => {
     try {
-<<<<<<< Updated upstream
-      // Tworzenie zamówienia
-      const createOrderResponse = await fetch('http://localhost:5111/api/Order', {
-=======
       if (!orderId || !dishId) {
         console.error('orderId or dishId is missing.');
         alert('Błąd podczas zamawiania. Spróbuj ponownie.');
@@ -62,55 +58,10 @@ const DishDetails = ({ route, navigation }) => {
   
       // Wywołanie POST na endpoint /api/OrderItem/ProductToOrder
       const response = await fetch('http://localhost:5111/api/OrderItem/ProductToOrder', {
->>>>>>> Stashed changes
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-<<<<<<< Updated upstream
-        body: JSON.stringify({
-          // Dodać ewentualne dane potrzebne do utworzenia zamówienia
-        }),
-      });
-
-      if (createOrderResponse.ok) {
-        const createOrderData = await createOrderResponse.json();
-
-        if (createOrderData.orderId) {
-          console.log('Order created. Order ID:', createOrderData.orderId);
-
-          // Dodawanie produktu do zamówienia
-          const orderItemResponse = await fetch('http://localhost:5111/api/OrderItem', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              "orderItemId": createOrderData.orderId, // Ustawienie orderId z poprzedniego zapytania
-              "productId": dishDetails.id,
-              "itemQuantity": 1,
-            }),
-          });
-
-          if (orderItemResponse.ok) {
-            const orderItemData = await orderItemResponse.json();
-
-            if (orderItemData.orderItemId) {
-              console.log('Order Item added. Order Item ID:', orderItemData.orderItemId);
-              setOrderItemCreated(true);
-              navigation.navigate('HomePage', { orderItemCreated: true });
-            } else {
-              console.error('Błąd dodawania produktu do zamówienia. Brak poprawnych danych w odpowiedzi.');
-            }
-          } else {
-            console.error('Błąd dodawania produktu do zamówienia:', orderItemResponse.statusText);
-          }
-        } else {
-          console.error('Błąd tworzenia zamówienia. Brak poprawnych danych w odpowiedzi.');
-        }
-      } else {
-        console.error('Błąd tworzenia zamówienia:', createOrderResponse.statusText);
-=======
         body: JSON.stringify({ orderItem }), // Zmiana formatu na pojedynczy obiekt
       });
   
@@ -121,7 +72,6 @@ const DishDetails = ({ route, navigation }) => {
         const errorMessage = await response.text();
         console.error('Błąd podczas dodawania produktów do zamówienia:', errorMessage);
         alert('Błąd podczas dodawania produktów do zamówienia. Spróbuj ponownie.');
->>>>>>> Stashed changes
       }
     } catch (error) {
       console.error('Błąd wykonania żądania:', error.message);
