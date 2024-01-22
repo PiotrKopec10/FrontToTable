@@ -29,7 +29,7 @@ const AdminPage = () => {
 
     const fetchData = async () => {
         try {
-            const response = await fetch();
+            const response = await fetch(config.endpoints.Product);
             const result = await response.json();
             setApiData(result);
         } catch (error) {
