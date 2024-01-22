@@ -1,57 +1,106 @@
 import React, { useState, useContext } from 'react';
 import { View, Text, Button, Image, TextInput } from 'react-native';
 import { RadioButton } from 'react-native-paper';
-import AuthContext from './AuthContext'; // Dostosuj ścieżkę
 import LoginPageStyle from './styles/LoginPageStyles';
 
 const LoginPage = ({ navigation }) => {
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
   const [tablenr, setTableNr] = useState('');
-  const [restaurantnr, setRestaurantNr] = useState('');
-  const [role, setRole] = useState('waiter'); // Default role is 'waiter'
+  const [role, setRole] = useState('waiter');
+  const [restaurantId, setRestaurantId] = useState('');
 
-  const authContext = useContext(AuthContext);
 
-  const handleLogin = () => {
-    if (role === 'restaurant') {
-      fetch(`http://localhost:5111/api/Restaurant/login/${login}/${password}`)
-        .then(response => response.json())
-        .then(data => {
-          console.log('Zalogowano jako restaurant. Dane:', data);
-          navigation.navigate('Menu', { restaurantId: data.restaurantId });
+  const [showLoginForm, setShowLoginForm] = useState(true);
+const [error, setError] = useState(null);
 
-          // Przechowaj informacje o restauracji w kontekście
-          authContext.setRestaurantInfo({
-            restaurantId: data.restaurantId,
-            // Dodaj inne właściwości, jeśli są potrzebne
-          });
-        })
-        .catch(error => {
-          console.error('Błąd logowania jako restaurant:', error);
-        });
+const handleLogin = () => {
+  if (role === 'restaurant') {
+    fetch(`http://localhost:5111/api/Restaurant/login/${login}/${password}`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Błąd logowania jako restaurant');
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log('Zalogowano jako restaurant. id restauracji::', data.restaurantId);
+        console.log(data);
+        setRestaurantId(data.restaurantId);
+        setShowLoginForm(false);
+      })
+      .catch(error => {
+        console.error(error);
+        setError(error.message);
+      });
+  } else {
+    fetch(`http://localhost:5111/api/Waiter/login/${login}/${password}`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Błąd logowania jako waiter');
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log('Zalogowano jako waiter. Dane:', data);
+        navigation('WaiterPage',{waiterId: data.waiterId})
+      })
+      .catch(error => {
+        console.error(error);
+        setError(error.message);
+      });
+  }
+};
+
+const handleStart = async () => {
+  try {
+
+    const response = await fetch('http://localhost:5111/api/order', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    
+      body: JSON.stringify({
+          orderId: 0,
+          orderTime: "2024-01-21T20:39:47.930Z",
+          orderStatus: 0,
+          orderComment: "",
+          paymentMethod: "", 
+          waiterId: null,
+          tableId: parseInt(tablenr,10),
+          restaurantId: restaurantId
+      }),
+    });
+
+    if (response.ok) {
+      const orderData = await response.json();
+      const orderId = orderData.orderId;
+
+      console.log('Zamówienie rozpoczęte pomyślnie, ID zamówienia:', orderId);
+
+      navigation.navigate('Menu', { orderId: orderId });
     } else {
-      fetch(`http://localhost:5111/api/Waiter/login/${login}/${password}`)
-        .then(response => response.json())
-        .then(data => {
-          console.log('Zalogowano jako waiter. Dane:', data);
-          navigation.navigate('WaiterPage', { waiterId: data.waiterId });
-          authContext.setWaiterInfo({
-            
-            waiterId: data.waiterId,
-            waiterName: data.waiterName,
+      const errorMessage = await response.text();
+      setError(errorMessage);
 
-            
-          });
-        })
-        .catch(error => {
-          console.error('Błąd logowania jako waiter:', error);
-        });
+      console.error('Błąd podczas rozpoczynania zamówienia:', errorMessage);
+
+      alert('Błąd podczas rozpoczynania zamówienia. Spróbuj ponownie.');
     }
-  };
+  } catch (error) {
+    setError(error.message);
+
+    console.error('Błąd wykonania żądania:', error.message);
+
+    alert('Wystąpił błąd. Spróbuj ponownie.');
+  }
+};
 
   return (
     <View style={LoginPageStyle.container}>
+  {showLoginForm && (
+    <>
       <Image source={require('./photo/logo.png')} style={LoginPageStyle.logo} />
 
       <View style={LoginPageStyle.radioButtonContainer}>
@@ -69,7 +118,7 @@ const LoginPage = ({ navigation }) => {
           </RadioButton.Group>
         </View>
       </View>
-  
+
       <TextInput
         style={LoginPageStyle.input}
         placeholder="Login"
@@ -83,7 +132,7 @@ const LoginPage = ({ navigation }) => {
         onChangeText={(text) => setPassword(text)}
         value={password}
       />
-        
+
       {role === 'restaurant' && (
         <TextInput
           style={LoginPageStyle.input}
@@ -92,9 +141,28 @@ const LoginPage = ({ navigation }) => {
           value={tablenr}
         />
       )}
-   
+
       <Button style={LoginPageStyle.button} title="Zaloguj się" color="#705537" onPress={handleLogin} />
+
+      {error && (
+        <View style={{ marginTop: 20 }}>
+          <Text style={{ color: 'red' }}>{error}</Text>
+        </View>
+      )}
+    </>
+  )}
+
+  {!showLoginForm && (
+    <View style={LoginPageStyle.startButtonContainer}>
+      <Button
+        title="Rozpocznij zamówienie"
+        color="#705537"
+        onPress={handleStart}
+      />
     </View>
+  )}
+</View>
+
   );
 };
 

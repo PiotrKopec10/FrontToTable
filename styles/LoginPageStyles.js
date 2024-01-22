@@ -1,5 +1,19 @@
 import { StyleSheet } from 'react-native';
 
+export const StartPageStyle = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  logo: {
+    width: 200,
+    height: 200,
+    marginBottom: 20,
+  },
+});
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
