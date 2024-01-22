@@ -86,7 +86,20 @@ const WaiterPageStyles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 8,
     borderColor: '#FFD983',
+  }, 
+  readyButton:
+  {
+    backgroundColor: 'red',
+    padding: 10,
+    borderRadius: 8,
+
   },
+  readyButtonText:
+  {
+    color: 'white',
+    fontWeight: 'bold',
+
+  }
 });
 
 export default WaiterPageStyles;

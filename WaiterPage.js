@@ -45,17 +45,31 @@ const WaiterPage = () => {
     const acceptOrder = async (orderId) => {
         try {
             console.log('Próba akceptacji zamówienia o ID:', orderId);
+
+            const newWaiterId = 1;
+            const newRestaurantId = 1;
+
             await fetch(`${config.endpoints.Order}/${orderId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ orderStatus: 1 }),
- 
+                //Zmienic jak logowanie bedzie dzialac
+                body: JSON.stringify({
+                    orderId: orderId,
+                    orderTime: '2024-01-22T13:41:10.883Z',
+                    orderStatus: 1,
+                    orderComment: 'Naprawde Pyszne',
+                    paymentMethod: 'Kartaaa',
+                    waiterId: 1,
+                    tableId: 1,
+                    restaurantId: 1,
+                }),
             });
-            
+
             const response = await fetch(config.endpoints.Order);
             const result = await response.json();
+
             result.sort((a, b) => {
                 if (a.orderStatus === b.orderStatus) {
                     return 0;
@@ -71,19 +85,76 @@ const WaiterPage = () => {
         }
     };
 
+    const MakeReadyOrder = async (orderId) => {
+        try {
+            console.log('Próba akceptacji zamówienia o ID:', orderId);
+    
+            const newWaiterId = 1;
+            const newRestaurantId = 1;
+    
+            await fetch(`${config.endpoints.Order}/${orderId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    orderId: orderId,
+                    orderTime: '2024-01-22T13:41:10.883Z',
+                    orderStatus: 2, 
+                    orderComment: 'Naprawde Pyszne',
+                    paymentMethod: 'Kartaaa',
+                    waiterId: 1,
+                    tableId: 1,
+                    restaurantId: 1,
+                }),
+            });
+    
+            const response = await fetch(config.endpoints.Order);
+            const result = await response.json();
+    
+            result.sort((a, b) => {
+                if (a.orderStatus === b.orderStatus) {
+                    return 0;
+                } else if (a.orderStatus === 2) { 
+                    return -1;
+                } else {
+                    return 1;
+                }
+            });
+    
+            setOrders(result);
+        } catch (error) {
+            console.error('Błąd przy akceptowaniu zamówienia:', error);
+        }
+    };
+    
+    
     const renderOrderItem = ({ item }) => {
         const orderDate = new Date(item.orderTime);
         const formattedOrderDate = `${orderDate.getDate()}-${orderDate.getMonth() + 1}-${orderDate.getFullYear()} ${orderDate.getHours()}:${orderDate.getMinutes()}:${orderDate.getSeconds()}`;
 
+        if (item.orderStatus !== 0 && item.orderStatus !== 1) {
+            return null;
+        }
+
         return (
             <View style={WaiterPageStyles.orderItemContainer}>
                 <Text>{`Order ID: ${item.orderId}`}</Text>
-                <Text>{`Order Time: ${formattedOrderDate}`}</Text>
-                <Text>{`Order Status: ${item.orderStatus}`}</Text>
+                <Text>{`Order Time: ${formattedOrderDate}`}</Text>               
                 <Text>{`Order Comment: ${item.orderComment}`}</Text>
-                {item.orderStatus === 1 ? (
-                    <Text style={WaiterPageStyles.acceptedOrder}>Zamówienie zaakceptowane</Text>
-                ) : item.orderStatus === 2 ? (
+                <Text>{`Payment Method: ${item.paymentMethod}`}</Text>
+                <Text>{`Table Number: ${item.tableId}`}</Text>
+                {item.orderStatus === 1 ? (                 
+                    <View>
+                    <Text style={WaiterPageStyles.newOrder}>Zamówienie zaakceptowane</Text>
+                    <TouchableOpacity onPress={() => MakeReadyOrder(item.orderId)}>
+                        <View style={WaiterPageStyles.readyButton}>
+                            <Text style={WaiterPageStyles.readyButtonText}>Zaznacz jako gotowe</Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
+                    
+                ) : item.orderStatus === 0 ? (
                     <View>
                         <Text style={WaiterPageStyles.newOrder}>Nowe zamówienie</Text>
                         <TouchableOpacity onPress={() => acceptOrder(item.orderId)}>
@@ -102,7 +173,7 @@ const WaiterPage = () => {
         <View style={{ flex: 1 }}>
             <ImageBackground source={require('./photo/BG1.png')} style={{ flex: 1, resizeMode: 'cover' }}>
                 <FlatList
-                    data={orders}
+                    data={orders.filter(item => item.orderStatus === 0 || item.orderStatus === 1)}
                     keyExtractor={(item) => item.orderId.toString()}
                     renderItem={({ item }) => (
                         <View key={item.orderId}>
@@ -124,6 +195,7 @@ const WaiterPage = () => {
             </ImageBackground>
         </View>
     );
+    
 };
 
 export default WaiterPage;
