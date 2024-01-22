@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import { View, Text, Button, Image, TextInput } from 'react-native';
-import { RadioButton } from 'react-native-paper'; // Import RadioButton from react-native-paper
+import Keytar from 'react-native-keytar';
+import { RadioButton } from 'react-native-paper';
 import LoginPageStyle from './styles/LoginPageStyles';
 
 const LoginPage = ({ navigation }) => {
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
   const [tablenr, setTableNr] = useState('');
-  const [restaurantnr, setRestaurantNr] = useState('');
-  const [role, setRole] = useState('waiter'); // Default role is 'waiter'
+  const [role, setRole] = useState('waiter'); 
+  let [restaurantNr, setRestaurantId] = useState(''); 
 
    // console.log('Login:', login);
     // console.log('Password:', password);
@@ -26,8 +27,10 @@ const LoginPage = ({ navigation }) => {
         fetch(`http://localhost:5111/api/Restaurant/login/${login}/${password}`)
           .then(response => response.json())
           .then(data => {
+          setRestaurantId(data.restaurantId);
+          
             // Pobierz restaurantId i przekieruj do HomePage z odpowiednim parametrem
-            navigation.navigate('HomePage', { restaurantId: data.restaurantId });
+            navigation.navigate('Start');
           })
           .catch(error => {
             console.error('Błąd logowania jako restaurant:', error);
@@ -37,15 +40,18 @@ const LoginPage = ({ navigation }) => {
         fetch(`http://localhost:5111/api/Waiter/login/${login}/${password}`)
           .then(response => response.json())
           .then(data => {
+            console.log(data.waiterId);
+            const restaurantId=restaurantId;
             // Pobierz waiterId i przekieruj do WaiterPage z odpowiednim parametrem
             navigation.navigate('WaiterPage', { waiterId: data.waiterId });
           })
           .catch(error => {
             console.error('Błąd logowania jako waiter:', error);
           });
+
       }
     };
-
+    
   return (
     <View style={LoginPageStyle.container}>
 

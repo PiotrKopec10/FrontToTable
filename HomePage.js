@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, FlatList, Image } from 'react-native';
 import HomePageStyles from './styles/HomePageStyles';
+
+
 const HomePage = ({route,  navigation }) => {
   const { orderId } = route.params;
   const [selectedCategory, setSelectedCategory] = useState(null);
