@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, Button, Image, TextInput } from 'react-native';
-import Keytar from 'react-native-keytar';
-import { RadioButton } from 'react-native-paper';
+
+import { RadioButton } from 'react-native-paper'; // Import RadioButton from react-native-paper
 import LoginPageStyle from './styles/LoginPageStyles';
 
 const LoginPage = ({ navigation }) => {
@@ -10,6 +10,7 @@ const LoginPage = ({ navigation }) => {
   const [tablenr, setTableNr] = useState('');
   const [role, setRole] = useState('waiter'); 
   let [restaurantNr, setRestaurantId] = useState(''); 
+
 
    // console.log('Login:', login);
     // console.log('Password:', password);
@@ -51,7 +52,6 @@ const LoginPage = ({ navigation }) => {
 
       }
     };
-    
   return (
     <View style={LoginPageStyle.container}>
 
@@ -99,6 +99,7 @@ const LoginPage = ({ navigation }) => {
       )}
    
       <Button style={LoginPageStyle.button} title="Zaloguj się" color="#705537" onPress={handleLogin} />
+
     </View>
   );
 };

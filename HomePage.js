@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, FlatList, Image } from 'react-native';
+import { View, Text, TouchableOpacity, FlatList, Image, ImageBackground } from 'react-native';
 import HomePageStyles from './styles/HomePageStyles';
-
 
 const HomePage = ({route,  navigation }) => {
   const { orderId } = route.params;
+
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [apiData, setApiData] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:5111/api/Product', {
+        const response = await fetch(config.endpoints.Product, {
           method: 'GET',
           headers: {
             'accept': 'text/plain',
@@ -26,13 +26,13 @@ const HomePage = ({route,  navigation }) => {
     };
 
     fetchData();
-  }, []); // Pobieranie danych przy pierwszym renderowaniu
+  }, []);
 
   const menuItems = apiData.map((item) => ({
     id: item.productId.toString(),
     name: item.productName,
-    category: item.productStatus, // Użyj nazwy produktu jako kategorii, możesz dostosować to według potrzeb
-    image: { uri: item.imageUrl }, // Użyj imageUrl jako źródło obrazu
+    category: item.productStatus,
+    image: { uri: item.imageUrl },
     price: item.productPrice,
   }));
 
@@ -46,54 +46,73 @@ const HomePage = ({route,  navigation }) => {
       onPress={() => navigation.navigate('DishDetails', { dishId: item.id,orderId: orderId})}
     >
       <Image source={item.image} style={HomePageStyles.menuItemImage} />
-      <Text style={HomePageStyles.menuItemName}>{item.name}</Text>
-      <Text style={HomePageStyles.menuItemPrice}>{`${item.price.toFixed(2)}`}</Text>
+      <Text style={[HomePageStyles.menuItemName, { color: 'white'}]}>{item.name}</Text>
+      <Text style={[HomePageStyles.menuItemPrice, { color: 'white', paddingBottom: 5 }]}>{`${item.price.toFixed(2)}`}</Text>
     </TouchableOpacity>
   );
 
   const renderCategoryButton = (category) => (
     <TouchableOpacity
-      style={[HomePageStyles.categoryButton, selectedCategory === category && HomePageStyles.selectedCategoryButton]}
+      style={[
+        HomePageStyles.categoryButton,
+        selectedCategory === category && HomePageStyles.selectedCategoryButton,
+      ]}
       onPress={() => handleCategoryPress(category)}
     >
-      <Text>{category}</Text>
+      <Text style={[
+        HomePageStyles.categoryButtonText,
+        selectedCategory === category && { fontWeight: 'bold' },
+      ]}>{category}</Text>
     </TouchableOpacity>
   );
 
   const handleCategoryPress = (category) => {
-    if (category === 'Wszystkie dania') {
-      setSelectedCategory(null);
-    } else {
-      setSelectedCategory(selectedCategory === category ? null : category);
-    }
+    setSelectedCategory(selectedCategory === category ? null : category);
   };
 
 
   const handleOrderPress = () => {
     navigation.navigate('Order',{orderId: orderId});
+
   };
 
   return (
-    <View style={[HomePageStyles.container, { backgroundColor: '#FFD983' }]}>
-      <View style={HomePageStyles.categoriesContainer}>
-        {renderCategoryButton('Wszystkie dania')}
-        {renderCategoryButton('Dania główne')}
-        {renderCategoryButton('Zupy')}
-        {renderCategoryButton('Przystawki')}
-        {renderCategoryButton('Napoje')}
-        {renderCategoryButton('Dodatki')}
+    <ImageBackground source={require('./photo/BG1.png')} style={[HomePageStyles.container, { backgroundColor: 'rgba(255, 255, 255, 0.6)' }]}>
+      {/* Sekcja Logo i Kategorie */}
+      <View style={[HomePageStyles.sectionContainer, HomePageStyles.headerContainer]}>
+        <View style={HomePageStyles.orderContainer}>
+          <Image source={require('./photo/logo.png')} style={[HomePageStyles.order, {marginBottom: 15}]} />
+        </View>
+
+        <View style={HomePageStyles.categoriesContainer}>
+           {/*renderCategoryButton('Wszystkie dania')*/}
+
+          {renderCategoryButton('Dania główne')}
+          {renderCategoryButton('Zupy')}
+          {renderCategoryButton('Przystawki')}
+          {renderCategoryButton('Napoje')}
+          {renderCategoryButton('Dodatki')}
+        </View>
       </View>
-      <FlatList
-        data={filteredMenuItems}
-        keyExtractor={(item) => item.id}
-        renderItem={renderItem}
-        numColumns={2}
-      />
-      <TouchableOpacity onPress={handleLogoClick}>
-        <Image style={HomePageStyles.logo} source={require('./photo/sumup.png')} />
-        <Text style={HomePageStyles.logotext}>Podsumowanie</Text>
-      </TouchableOpacity>
-    </View>
+
+      {/* Sekcja Menu z Zamówieniem */}
+      <View style={[HomePageStyles.sectionContainer, HomePageStyles.menuContainer]}>
+        <FlatList
+          data={filteredMenuItems}
+          keyExtractor={(item) => item.id}
+          renderItem={renderItem}
+          numColumns={4}
+        />
+      </View>
+
+      {/* Sekcja Zamówienia */}
+      <View style={[HomePageStyles.sectionContainer, HomePageStyles.footerContainer]}>
+        <TouchableOpacity onPress={handleOrderPress} style={HomePageStyles.orderContainer}>
+        <Image style={HomePageStyles.order} source={require('./photo/sumup.png')} tintColor="#FFD983" />
+          <Text style={[HomePageStyles.orderText, { fontWeight: 'bold', color: '#FFD983' }]}>Zamówienie</Text>
+        </TouchableOpacity>
+      </View>
+    </ImageBackground>
   );
 };
 

@@ -26,17 +26,12 @@ const CartPageStyles = StyleSheet.create({
   },
   columnHeader: {
     fontSize: 18,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
     fontWeight: 'bold',
   },
-
   columnName: {
-    fontSize: 2,
-    fontWeight: 'bold',
+    flexDirection: 'row',
+    alignItems: 'center',
   },
-
   quantityContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -49,22 +44,18 @@ const CartPageStyles = StyleSheet.create({
     borderWidth: 1.5,
     borderRadius: 5,
     textAlign: 'center',
+    marginLeft: 6,
+    marginRight: 6,
   },
   arrowButton: {
     paddingHorizontal: 8,
     backgroundColor: '#171716',
     borderRadius: 5,
-    marginLeft: 6,
-    marginRight: 6,
   },
   arrowButtonText: {
     color: 'white',
     fontWeight: 'bold',
     fontSize: 18,
-  },
-  itemPrice: {
-    fontSize: 18,
-    color: '#171716',
   },
   itemTotal: {
     fontSize: 18,
@@ -77,10 +68,13 @@ const CartPageStyles = StyleSheet.create({
   totalLabel: {
     fontSize: 28,
     fontWeight: 'bold',
+    color: '#171716',
   },
   totalValue: {
     fontSize: 28,
     fontWeight: 'bold',
+    color: '#171716',
+    paddingBottom: 10, 
   },
   orderButton: {
     marginTop: 16,
@@ -94,6 +88,74 @@ const CartPageStyles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
   },
+  noteButton: {
+    backgroundColor: '#FFD983',
+    padding: 8,
+    borderRadius: 5,
+    marginLeft: 10,
+  },
+  noteButtonText: {
+    color: '#171716',
+    fontWeight: 'bold',
+    fontSize: 14,
+  },
+  dishImage: {
+    width: 50,
+    height: 50,
+    resizeMode: 'contain',
+    marginRight: 10,
+  },
+  paymentModalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.75)',
+  },
+  modalHeader: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    color: 'white',
+  },
+  paymentMethodButton: {
+    backgroundColor: '#171716',
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 16,
+    flexDirection: 'row', 
+    alignItems: 'center',
+  },
+  paymentMethodImage: {
+    width: 24,
+    height: 24,
+    marginRight: 10,
+  },
+  paymentMethodButtonText: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  modalButton: {
+    backgroundColor: '#FFD983',
+    padding: 12,
+    borderRadius: 8,
+    marginTop: 16,
+  },
+  modalButtonText: {
+    color: '#171716',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  blikCodeInput: {
+    width: 200,
+    height: 40,
+    textAlign: 'center',
+    borderWidth: 1.5,
+    borderRadius: 5,
+    marginBottom: 10,
+    paddingLeft: 10,
+    color:'#FFFFFF'
+  }
 });
 
 export default CartPageStyles;
