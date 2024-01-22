@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, FlatList, Image, ImageBackground } from 'react-native';
 import HomePageStyles from './styles/HomePageStyles';
 
+import config from './config';
+
 const HomePage = ({route,  navigation }) => {
   const { orderId } = route.params;
 

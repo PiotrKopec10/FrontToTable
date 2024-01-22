@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, Text, Button, Image, TextInput } from 'react-native';
-
-import { RadioButton } from 'react-native-paper'; // Import RadioButton from react-native-paper
+import { RadioButton } from 'react-native-paper';
+import AuthContext from './AuthContext'; // Dostosuj ścieżkę
 import LoginPageStyle from './styles/LoginPageStyles';
 
 const LoginPage = ({ navigation }) => {
@@ -11,49 +11,49 @@ const LoginPage = ({ navigation }) => {
   const [restaurantnr, setRestaurantNr] = useState('');
   const [role, setRole] = useState('waiter'); // Default role is 'waiter'
 
+  const authContext = useContext(AuthContext);
 
-   // console.log('Login:', login);
-    // console.log('Password:', password);
-    // console.log('Table:', tablenr);
-    // console.log('Restaurant:', restaurantnr);
-    // console.log('Role:', role);
+  const handleLogin = () => {
+    if (role === 'restaurant') {
+      fetch(`http://localhost:5111/api/Restaurant/login/${login}/${password}`)
+        .then(response => response.json())
+        .then(data => {
+          console.log('Zalogowano jako restaurant. Dane:', data);
+          navigation.navigate('Menu', { restaurantId: data.restaurantId });
 
-    // if (login === 'lui' && password === 'lui') {
-    //   navigation.navigate('AdminPage');
-    // } 
-
-    const handleLogin = () => {
-      if (role === 'restaurant') {
-        // Jeśli zaznaczono "Restaurant", wywołaj odpowiedni endpoint
-        fetch(`http://localhost:5111/api/Restaurant/login/${login}/${password}`)
-          .then(response => response.json())
-          .then(data => {
-            // Pobierz restaurantId i przekieruj do HomePage z odpowiednim parametrem
-            navigation.navigate('HomePage', { restaurantId: data.restaurantId });
-          })
-          .catch(error => {
-            console.error('Błąd logowania jako restaurant:', error);
+          // Przechowaj informacje o restauracji w kontekście
+          authContext.setRestaurantInfo({
+            restaurantId: data.restaurantId,
+            // Dodaj inne właściwości, jeśli są potrzebne
           });
-      } else {
-        // Jeśli zaznaczono "Waiter", wywołaj odpowiedni endpoint
-        fetch(`http://localhost:5111/api/Waiter/login/${login}/${password}`)
-          .then(response => response.json())
-          .then(data => {
-            // Pobierz waiterId i przekieruj do WaiterPage z odpowiednim parametrem
-            navigation.navigate('WaiterPage', { waiterId: data.waiterId });
-          })
-          .catch(error => {
-            console.error('Błąd logowania jako waiter:', error);
+        })
+        .catch(error => {
+          console.error('Błąd logowania jako restaurant:', error);
+        });
+    } else {
+      fetch(`http://localhost:5111/api/Waiter/login/${login}/${password}`)
+        .then(response => response.json())
+        .then(data => {
+          console.log('Zalogowano jako waiter. Dane:', data);
+          navigation.navigate('WaiterPage', { waiterId: data.waiterId });
+          authContext.setWaiterInfo({
+            
+            waiterId: data.waiterId,
+            waiterName: data.waiterName,
+
+            
           });
-      }
-    };
+        })
+        .catch(error => {
+          console.error('Błąd logowania jako waiter:', error);
+        });
+    }
+  };
+
   return (
     <View style={LoginPageStyle.container}>
+      <Image source={require('./photo/logo.png')} style={LoginPageStyle.logo} />
 
-
-<Image source={require('./photo/logo.png')} style={LoginPageStyle.logo} />
-
-      {/* Radio buttons for choosing role */}
       <View style={LoginPageStyle.radioButtonContainer}>
         <Text>Rola:</Text>
         <View>
@@ -84,7 +84,7 @@ const LoginPage = ({ navigation }) => {
         value={password}
       />
         
-        {role === 'restaurant' && (
+      {role === 'restaurant' && (
         <TextInput
           style={LoginPageStyle.input}
           placeholder="Numer stolika"
@@ -94,7 +94,6 @@ const LoginPage = ({ navigation }) => {
       )}
    
       <Button style={LoginPageStyle.button} title="Zaloguj się" color="#705537" onPress={handleLogin} />
-
     </View>
   );
 };
