@@ -4,158 +4,99 @@ const CartPageStyles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: '#FFD983',
   },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    color: '#171716',
-  },
-  separator: {
-    height: 2.5,
-    backgroundColor: '#171716',
-    marginTop: 3,
-    marginBottom: 20,
+  tableContainer: {
+    flex: 1,
+    marginTop: 16
   },
   tableRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 8,
-  },
-  columnHeader: {
-    fontSize: 18,
-    fontWeight: 'bold',
+    justifyContent: 'space-between',
+    height: 60,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd',
   },
   columnName: {
     flexDirection: 'row',
     alignItems: 'center',
   },
-  quantityContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 5,
-    paddingLeft: 80,
-  },
-  quantityInput: {
-    width: 40,
-    height: 30,
-    borderWidth: 1.5,
-    borderRadius: 5,
-    textAlign: 'center',
-    marginLeft: 6,
-    marginRight: 6,
-  },
-  arrowButton: {
-    paddingHorizontal: 8,
-    backgroundColor: '#171716',
-    borderRadius: 5,
-  },
-  arrowButtonText: {
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: 18,
-  },
-  itemTotal: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#171716',
-  },
-  totalContainer: {
-    margin: 16,
-  },
-  totalLabel: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#171716',
-  },
-  totalValue: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#171716',
-    paddingBottom: 10, 
-  },
-  orderButton: {
-    marginTop: 16,
-    backgroundColor: '#171716',
-    padding: 12,
-    borderRadius: 8,
-    alignItems: 'center',
-  },
-  orderButtonText: {
-    color: 'white',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  noteButton: {
-    backgroundColor: '#FFD983',
-    padding: 8,
-    borderRadius: 5,
-    marginLeft: 10,
-  },
-  noteButtonText: {
-    color: '#171716',
-    fontWeight: 'bold',
-    fontSize: 14,
-  },
   dishImage: {
     width: 50,
     height: 50,
+    marginRight: 16,
     resizeMode: 'contain',
-    marginRight: 10,
   },
-  paymentModalContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.75)',
-  },
-  modalHeader: {
-    fontSize: 24,
+  dishName: {
+    fontSize: 16,
     fontWeight: 'bold',
-    marginBottom: 20,
-    color: 'white',
-  },
-  paymentMethodButton: {
-    backgroundColor: '#171716',
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 16,
-    flexDirection: 'row', 
-    alignItems: 'center',
-  },
-  paymentMethodImage: {
-    width: 24,
-    height: 24,
-    marginRight: 10,
-  },
-  paymentMethodButtonText: {
-    color: 'white',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  modalButton: {
-    backgroundColor: '#FFD983',
-    padding: 12,
-    borderRadius: 8,
-    marginTop: 16,
-  },
-  modalButtonText: {
-    color: '#171716',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  blikCodeInput: {
-    width: 200,
-    height: 40,
+    flexShrink: 1, // Adjust this line
     textAlign: 'center',
-    borderWidth: 1.5,
-    borderRadius: 5,
-    marginBottom: 10,
-    paddingLeft: 10,
-    color:'#FFFFFF'
-  }
+  },
+  quantityContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  arrowButton: {
+    padding: 8,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 4,
+    marginHorizontal: 8,
+  },
+  arrowButtonText: {
+    fontSize: 16,
+  },
+  quantityInput: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 4,
+    paddingHorizontal: 4,
+    marginHorizontal: 8,
+    textAlign: 'center',
+  },
+  itemTotal: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  noteButton: {
+    padding: 8,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 4,
+    marginHorizontal: 8,
+  },
+  noteButtonText: {
+    fontSize: 16,
+  },
+  totalContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    height: 50,
+    marginTop: 24,
+  },
+  totalLabel: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  totalValue: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  orderButton: {
+    backgroundColor: '#4CAF50',
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 4,
+    alignItems: 'center',
+    marginTop: 24,
+  },
+  orderButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
 });
 
 export default CartPageStyles;
