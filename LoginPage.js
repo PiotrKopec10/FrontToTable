@@ -43,7 +43,7 @@ const handleLogin = () => {
       })
       .then(data => {
         console.log('Zalogowano jako waiter. Dane:', data);
-        navigation('WaiterPage',{waiterId: data.waiterId})
+        navigation.navigate('WaiterPage',{waiterId: data.waiterId, restaurantId: data.restaurantId})
       })
       .catch(error => {
         console.error(error);

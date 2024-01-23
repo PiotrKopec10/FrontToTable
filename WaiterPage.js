@@ -1,36 +1,44 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, TouchableWithoutFeedback, ImageBackground, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, TouchableWithoutFeedback, ImageBackground, TouchableOpacity, } from 'react-native';
 import WaiterPageStyles from './styles/WaiterPageStyles';
 import config  from './config';
 
-const WaiterPage = () => {
+const WaiterPage = ({route }) => {
     const [orders, setOrders] = useState([]);
     const [expandedSections, setExpandedSections] = useState([]);
-
+    const { waiterId,restaurantId } = route.params;
+    console.log(waiterId);
+    console.log(restaurantId);
+   
+    const fetchOrders = async () => {
+        try {
+            const response = await fetch(`${config.endpoints.Order}/restaurant/${restaurantId}`);
+            const result = await response.json();
+    
+            const filteredOrders = result.filter(item => (
+                (item.orderStatus === 0 || item.orderStatus === 1) && item.restaurantId === restaurantId
+            ));
+    
+            filteredOrders.sort((a, b) => {
+                if (a.orderStatus === b.orderStatus) {
+                    return 0;
+                } else if (a.orderStatus === 1) {
+                    return -1;
+                } else {
+                    return 1;
+                }
+            });
+    
+            setOrders(filteredOrders);
+        } catch (error) {
+            console.error('Error fetching orders:', error);
+        }
+    };
+    
     useEffect(() => {
-        const fetchOrders = async () => {
-            try {
-                const response = await fetch(config.endpoints.Order);
-                const result = await response.json();
-                result.sort((a, b) => {
-                    if (a.orderStatus === b.orderStatus) {
-                        return 0;
-                    } else if (a.orderStatus === 1) {
-                        return -1;
-                    } else {
-                        return 1;
-                    }
-                });
-
-                setOrders(result);
-            } catch (error) {
-                console.error('Error fetching orders:', error);
-            }
-        };
-
         fetchOrders();
-    }, []);
-
+    }, [restaurantId]);
+    
     const toggleSection = (orderId) => {
         const newExpandedSections = [...expandedSections];
         if (newExpandedSections.includes(orderId)) {
@@ -41,35 +49,35 @@ const WaiterPage = () => {
         }
         setExpandedSections(newExpandedSections);
     };
-
+    
     const acceptOrder = async (orderId) => {
         try {
-            console.log('Próba akceptacji zamówienia o ID:', orderId);
-
-            const newWaiterId = 1;
-            const newRestaurantId = 1;
-
+            const orderDetailsResponse = await fetch(`${config.endpoints.Order}/${orderId}`);
+            const currentOrderDetails = await orderDetailsResponse.json();
+               
+            const updatedOrder = {
+                orderId: currentOrderDetails.orderId,
+                orderTime: currentOrderDetails.orderTime, 
+                orderStatus: 1,
+                orderComment: currentOrderDetails.orderComment, 
+                paymentMethod: currentOrderDetails.paymentMethod, 
+                waiterId: waiterId,
+                tableId: currentOrderDetails.tableId, 
+                restaurantId: restaurantId,
+            };
+            console.log(updatedOrder);
             await fetch(`${config.endpoints.Order}/${orderId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                //Zmienic jak logowanie bedzie dzialac
-                body: JSON.stringify({
-                    orderId: orderId,
-                    orderTime: '2024-01-22T13:41:10.883Z',
-                    orderStatus: 1,
-                    orderComment: 'Naprawde Pyszne',
-                    paymentMethod: 'Kartaaa',
-                    waiterId: 1,
-                    tableId: 1,
-                    restaurantId: 1,
-                }),
+                
+                body: JSON.stringify(updatedOrder),
             });
-
+    
             const response = await fetch(config.endpoints.Order);
             const result = await response.json();
-
+    
             result.sort((a, b) => {
                 if (a.orderStatus === b.orderStatus) {
                     return 0;
@@ -79,7 +87,9 @@ const WaiterPage = () => {
                     return 1;
                 }
             });
+    
             setOrders(result);
+            fetchOrders();
         } catch (error) {
             console.error('Błąd przy akceptowaniu zamówienia:', error);
         }
@@ -87,35 +97,36 @@ const WaiterPage = () => {
 
     const MakeReadyOrder = async (orderId) => {
         try {
-            console.log('Próba akceptacji zamówienia o ID:', orderId);
+            // Fetch current order details
+            const orderDetailsResponse = await fetch(`${config.endpoints.Order}/${orderId}`);
+            const currentOrderDetails = await orderDetailsResponse.json();
     
-            const newWaiterId = 1;
-            const newRestaurantId = 1;
+            // Use the current order details to construct the updated order
+            const updatedOrder = {
+                orderId: currentOrderDetails.orderId,
+                orderTime: currentOrderDetails.orderTime,
+                orderStatus: 2,
+                orderComment: currentOrderDetails.orderComment,
+                paymentMethod: currentOrderDetails.paymentMethod,
+                waiterId: waiterId,
+                tableId: currentOrderDetails.tableId,
+                restaurantId: restaurantId,
+            };
     
             await fetch(`${config.endpoints.Order}/${orderId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({
-                    orderId: orderId,
-                    orderTime: '2024-01-22T13:41:10.883Z',
-                    orderStatus: 2, 
-                    orderComment: 'Naprawde Pyszne',
-                    paymentMethod: 'Kartaaa',
-                    waiterId: 1,
-                    tableId: 1,
-                    restaurantId: 1,
-                }),
+                body: JSON.stringify(updatedOrder),
             });
-    
             const response = await fetch(config.endpoints.Order);
             const result = await response.json();
     
             result.sort((a, b) => {
                 if (a.orderStatus === b.orderStatus) {
                     return 0;
-                } else if (a.orderStatus === 2) { 
+                } else if (a.orderStatus === 2) {
                     return -1;
                 } else {
                     return 1;
@@ -123,11 +134,11 @@ const WaiterPage = () => {
             });
     
             setOrders(result);
+            fetchOrders();
         } catch (error) {
             console.error('Błąd przy akceptowaniu zamówienia:', error);
         }
     };
-    
     
     const renderOrderItem = ({ item }) => {
         const orderDate = new Date(item.orderTime);
