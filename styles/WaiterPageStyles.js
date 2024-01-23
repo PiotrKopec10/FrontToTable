@@ -75,6 +75,8 @@ const WaiterPageStyles = StyleSheet.create({
     padding: 16,
     marginBottom: 8,
     borderRadius: 8,
+    marginHorizontal: 20,
+    marginTop: 20,
   },
   sectionHeaderText: {
     fontSize: 18,
@@ -82,14 +84,15 @@ const WaiterPageStyles = StyleSheet.create({
   },
   sectionContent: {
     padding: 16,
-    backgroundColor: '#FFF',
+    backgroundColor: 'rgba(255, 255, 255, 0.25)',
     borderWidth: 2,
     borderRadius: 8,
     borderColor: '#FFD983',
-  }, 
+    marginTop: 8,
+  },
   readyButton:
   {
-    backgroundColor: 'red',
+    backgroundColor: 'green',
     padding: 10,
     borderRadius: 8,
 

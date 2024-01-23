@@ -1,24 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, TouchableWithoutFeedback, ImageBackground, TouchableOpacity, } from 'react-native';
 import WaiterPageStyles from './styles/WaiterPageStyles';
-import config  from './config';
+import config from './config';
 
-const WaiterPage = ({route }) => {
+const WaiterPage = ({ route }) => {
     const [orders, setOrders] = useState([]);
     const [expandedSections, setExpandedSections] = useState([]);
-    const { waiterId,restaurantId } = route.params;
+
+    const { waiterId, restaurantId } = route.params;
     console.log(waiterId);
     console.log(restaurantId);
-   
+
     const fetchOrders = async () => {
         try {
             const response = await fetch(`${config.endpoints.Order}/restaurant/${restaurantId}`);
             const result = await response.json();
-    
+
             const filteredOrders = result.filter(item => (
                 (item.orderStatus === 0 || item.orderStatus === 1) && item.restaurantId === restaurantId
             ));
-    
+
             filteredOrders.sort((a, b) => {
                 if (a.orderStatus === b.orderStatus) {
                     return 0;
@@ -28,17 +29,17 @@ const WaiterPage = ({route }) => {
                     return 1;
                 }
             });
-    
+
             setOrders(filteredOrders);
         } catch (error) {
             console.error('Error fetching orders:', error);
         }
     };
-    
+
     useEffect(() => {
         fetchOrders();
     }, [restaurantId]);
-    
+
     const toggleSection = (orderId) => {
         const newExpandedSections = [...expandedSections];
         if (newExpandedSections.includes(orderId)) {
@@ -49,20 +50,20 @@ const WaiterPage = ({route }) => {
         }
         setExpandedSections(newExpandedSections);
     };
-    
+
     const acceptOrder = async (orderId) => {
         try {
             const orderDetailsResponse = await fetch(`${config.endpoints.Order}/${orderId}`);
             const currentOrderDetails = await orderDetailsResponse.json();
-               
+
             const updatedOrder = {
                 orderId: currentOrderDetails.orderId,
-                orderTime: currentOrderDetails.orderTime, 
+                orderTime: currentOrderDetails.orderTime,
                 orderStatus: 1,
-                orderComment: currentOrderDetails.orderComment, 
-                paymentMethod: currentOrderDetails.paymentMethod, 
+                orderComment: currentOrderDetails.orderComment,
+                paymentMethod: currentOrderDetails.paymentMethod,
                 waiterId: waiterId,
-                tableId: currentOrderDetails.tableId, 
+                tableId: currentOrderDetails.tableId,
                 restaurantId: restaurantId,
             };
             console.log(updatedOrder);
@@ -71,13 +72,13 @@ const WaiterPage = ({route }) => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                
+
                 body: JSON.stringify(updatedOrder),
             });
-    
+
             const response = await fetch(config.endpoints.Order);
             const result = await response.json();
-    
+
             result.sort((a, b) => {
                 if (a.orderStatus === b.orderStatus) {
                     return 0;
@@ -87,7 +88,7 @@ const WaiterPage = ({route }) => {
                     return 1;
                 }
             });
-    
+
             setOrders(result);
             fetchOrders();
         } catch (error) {
@@ -97,11 +98,9 @@ const WaiterPage = ({route }) => {
 
     const MakeReadyOrder = async (orderId) => {
         try {
-            // Fetch current order details
             const orderDetailsResponse = await fetch(`${config.endpoints.Order}/${orderId}`);
             const currentOrderDetails = await orderDetailsResponse.json();
-    
-            // Use the current order details to construct the updated order
+
             const updatedOrder = {
                 orderId: currentOrderDetails.orderId,
                 orderTime: currentOrderDetails.orderTime,
@@ -112,7 +111,7 @@ const WaiterPage = ({route }) => {
                 tableId: currentOrderDetails.tableId,
                 restaurantId: restaurantId,
             };
-    
+
             await fetch(`${config.endpoints.Order}/${orderId}`, {
                 method: 'PUT',
                 headers: {
@@ -122,7 +121,7 @@ const WaiterPage = ({route }) => {
             });
             const response = await fetch(config.endpoints.Order);
             const result = await response.json();
-    
+
             result.sort((a, b) => {
                 if (a.orderStatus === b.orderStatus) {
                     return 0;
@@ -132,14 +131,14 @@ const WaiterPage = ({route }) => {
                     return 1;
                 }
             });
-    
+
             setOrders(result);
             fetchOrders();
         } catch (error) {
             console.error('Błąd przy akceptowaniu zamówienia:', error);
         }
     };
-    
+
     const renderOrderItem = ({ item }) => {
         const orderDate = new Date(item.orderTime);
         const formattedOrderDate = `${orderDate.getDate()}-${orderDate.getMonth() + 1}-${orderDate.getFullYear()} ${orderDate.getHours()}:${orderDate.getMinutes()}:${orderDate.getSeconds()}`;
@@ -151,20 +150,20 @@ const WaiterPage = ({route }) => {
         return (
             <View style={WaiterPageStyles.orderItemContainer}>
                 <Text>{`Order ID: ${item.orderId}`}</Text>
-                <Text>{`Order Time: ${formattedOrderDate}`}</Text>               
+                <Text>{`Order Time: ${formattedOrderDate}`}</Text>
                 <Text>{`Order Comment: ${item.orderComment}`}</Text>
                 <Text>{`Payment Method: ${item.paymentMethod}`}</Text>
                 <Text>{`Table Number: ${item.tableId}`}</Text>
-                {item.orderStatus === 1 ? (                 
+                {item.orderStatus === 1 ? (
                     <View>
-                    <Text style={WaiterPageStyles.newOrder}>Zamówienie zaakceptowane</Text>
-                    <TouchableOpacity onPress={() => MakeReadyOrder(item.orderId)}>
-                        <View style={WaiterPageStyles.readyButton}>
-                            <Text style={WaiterPageStyles.readyButtonText}>Zaznacz jako gotowe</Text>
-                        </View>
-                    </TouchableOpacity>
-                </View>
-                    
+                        <Text style={WaiterPageStyles.newOrder}>Zamówienie zaakceptowane</Text>
+                        <TouchableOpacity onPress={() => MakeReadyOrder(item.orderId)}>
+                            <View style={WaiterPageStyles.readyButton}>
+                                <Text style={WaiterPageStyles.readyButtonText}>Zaznacz jako gotowe</Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+
                 ) : item.orderStatus === 0 ? (
                     <View>
                         <Text style={WaiterPageStyles.newOrder}>Nowe zamówienie</Text>
@@ -203,10 +202,12 @@ const WaiterPage = ({route }) => {
                         </View>
                     )}
                 />
+                
+
             </ImageBackground>
         </View>
     );
-    
+
 };
 
 export default WaiterPage;
