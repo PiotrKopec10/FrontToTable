@@ -14,6 +14,7 @@ const LoginPage = ({ navigation }) => {
   const [showLoginForm, setShowLoginForm] = useState(true);
 const [error, setError] = useState(null);
 
+
 const handleLogin = () => {
   if (role === 'restaurant') {
     fetch(`http://localhost:5111/api/Restaurant/login/${login}/${password}`)
@@ -42,8 +43,13 @@ const handleLogin = () => {
         return response.json();
       })
       .then(data => {
-        console.log('Zalogowano jako waiter. Dane:', data);
-        navigation.navigate('WaiterPage',{waiterId: data.waiterId, restaurantId: data.restaurantId})
+      //  console.log('Zalogowano jako waiter. Dane:', data);
+
+        if (data.isAdmin) {
+          navigation.navigate('AdminPage', { waiterId: data.waiterId, restaurantId: data.restaurantId });        
+        } else {
+          navigation.navigate('WaiterPage', { waiterId: data.waiterId, restaurantId: data.restaurantId });
+        }
       })
       .catch(error => {
         console.error(error);
@@ -51,6 +57,8 @@ const handleLogin = () => {
       });
   }
 };
+
+
 
 const handleStart = async () => {
   try {
