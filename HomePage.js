@@ -7,26 +7,53 @@ const HomePage = ({route,  navigation }) => {
   const { orderId } = route.params;
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [apiData, setApiData] = useState([]);
+  const [restaurantId, setRestaurantId] = useState('');
+
 
   useEffect(() => {
-    const fetchData = async () => {
       try {
-        const response = await fetch(config.endpoints.Product, {
+         fetch(`${config.endpoints.Order}/${orderId}`, {
           method: 'GET',
           headers: {
             'accept': 'text/plain',
           },
+        }).then(response => {
+          if (!response.ok) {
+            throw new Error('Błąd logowania pobierania restaurantId');
+          }
+          return response.json();
+        })
+        .then(data => {
+          setRestaurantId(data.restaurantId);
+          getProducts(data.restaurantId);
         });
-
-        const result = await response.json();
-        setApiData(result);
+        // Fetch product data based on restaurantId
       } catch (error) {
         console.error('Error fetching data:', error);
       }
-    };
+    }
+  , [orderId, restaurantId]);
 
-    fetchData();
-  }, []);
+  const getProducts = (restaurantId) =>{
+  fetch(`http://localhost:5111/api/Product/restaurant/${restaurantId}`, {
+      method: 'GET',
+      headers: {
+        'accept': 'text/plain',
+      },
+    }).then(response => {
+      if (!response.ok) {
+        throw new Error('Błąd pobierania produktów po restaurantId');
+      }
+      return response.json();
+    })
+    .then(data => {
+      setApiData(data);
+    });
+  
+    
+    
+  }
+  
 
   const menuItems = apiData.map((item) => ({
     id: item.productId.toString(),
