@@ -3,15 +3,21 @@ import { View, Text, TouchableOpacity, FlatList, Image, Modal, TextInput, ImageB
 import AdminPageStyles from './styles/AdminPageStyles';
 import config  from './config';
 
-const AdminPage = () => {
+const AdminPage = ({route}) => {
     const [apiData, setApiData] = useState([]);
     const [isAddModalVisible, setIsAddModalVisible] = useState(false);
+    const {  restaurantId } = route.params;
     const [newProduct, setNewProduct] = useState({
         productName: '',
         productDescription: '',
         productPrice: 0,
+        productStatus: '',  
+        productCategory: '',  
         imageUrl: '',
+        restaurantId: '',
     });
+    
+  
     const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
     const [deleteProductId, setDeleteProductId] = useState(null);
     const [isEditModalVisible, setIsEditModalVisible] = useState(false);
@@ -29,7 +35,8 @@ const AdminPage = () => {
 
     const fetchData = async () => {
         try {
-            const response = await fetch(config.endpoints.Product);
+
+            const response = await fetch(`${config.endpoints.Product}?restaurantId=${restaurantId}`);
             const result = await response.json();
             setApiData(result);
         } catch (error) {
@@ -38,26 +45,36 @@ const AdminPage = () => {
     };
 
     const handleAddProduct = async () => {
-        if (!newProduct.productName || !newProduct.productDescription || !newProduct.productPrice || !newProduct.imageUrl) {
-            return;
-        }
-
         try {
-            const response = await fetch(config.endpoints.Product, {
-                method: 'POST',
+            const updatedProduct = {
+                productName: newProduct.productName,
+                productDescription: newProduct.productDescription,
+                productPrice: newProduct.productPrice,
+                productStatus: newProduct.productStatus,
+                productCategory: newProduct.productCategory,
+                imageUrl: newProduct.imageUrl,
+                restaurantId: restaurantId,
+            };
+            console.log(updatedProduct);
+    
+            const updateResponse = await fetch(config.endpoints.Product, {
+                method: 'POST',  
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(newProduct),
+                body: JSON.stringify(updatedProduct),
             });
-
-            if (response.status === 201) {
+    
+            if (updateResponse.status === 201) {
                 setIsAddModalVisible(false);
                 setNewProduct({
                     productName: '',
                     productDescription: '',
                     productPrice: 0,
+                    productStatus: '',
+                    productCategory: '',
                     imageUrl: '',
+                    restaurantId: '',
                 });
                 fetchData();
             } else {
@@ -67,6 +84,7 @@ const AdminPage = () => {
             console.error('Błąd podczas dodawania nowego produktu:', error);
         }
     };
+    
 
     const handleDeleteProduct = async () => {
         try {
