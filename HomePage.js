@@ -5,7 +5,6 @@ import config from './config';
 
 const HomePage = ({route,  navigation }) => {
   const { orderId } = route.params;
-
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [apiData, setApiData] = useState([]);
 
