@@ -59,6 +59,8 @@ const handleLogin = () => {
 
 const postOrder =(tableId,restaurantId)=>{
 
+  console.log(tableId);
+  console.log(restaurantId);
   fetch('http://localhost:5111/api/order', {
     method: 'POST',
     headers: {
@@ -102,7 +104,17 @@ const handleStart =() => {
       return response.json();
     })
     .then(data => {
-      postOrder(data[0].tabId,restaurantId);
+      const matchingTable = data.find(table => table.tabNum === tablenr);
+
+      if (matchingTable) {
+        console.log(matchingTable);
+        console.log(matchingTable.tabId);
+        postOrder(matchingTable.tabId, restaurantId);
+      } else {
+        console.error('Nie ma takiego numeru stolika dla tej restauracji:', tablenr);
+        setShowLoginForm(true);
+      }
+
     });
 };
 
