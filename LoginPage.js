@@ -13,10 +13,6 @@ const LoginPage = ({ navigation }) => {
   const [showLoginForm, setShowLoginForm] = useState(true);
 const [error, setError] = useState(null);
 
-function delay(time) {
-  return new Promise(resolve => setTimeout(resolve, time));
-}
-
 const handleLogin = () => {
   if (role === 'restaurant') {
     fetch(`http://localhost:5111/api/Restaurant/login/${login}/${password}`)
@@ -60,15 +56,38 @@ const handleLogin = () => {
   }
 };
 
-const postOrder =(tableId,restaurantId)=>{
-
-  console.log(tableId);
-  console.log(restaurantId);
+const postOrder =(tableId,restaurantId,cos)=>{
+  console.log("tableId: ",tableId);
+  console.log("restaurantId: ",restaurantId);
+  console.log("tableNr: ",cos);
+  fetch(`http://localhost:5111/api/Table/${tableId}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      tabId: tableId,
+      tabNum: cos,
+      tabStatus: false,
+      restaurantId: restaurantId
+  }),
+  })
+  
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Błąd aktualizacji statusu table');
+    }
+    return response.text();
+  })
+  .then(updatedData => {
+    console.log('Table updated successfully.', updatedData);
+  })
   fetch('http://localhost:5111/api/order', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
+    
     body: JSON.stringify({
       orderId: 0,
       orderTime: "2024-01-21T20:39:47.930Z",
@@ -95,7 +114,6 @@ const postOrder =(tableId,restaurantId)=>{
 }
 
 const handleStart =() => {
-
     fetch(`http://localhost:5111/api/Table/restaurant/${restaurantId}`, {
       method: 'GET',
       headers: {
@@ -108,13 +126,12 @@ const handleStart =() => {
       return response.json();
     })
     .then(data => {
-      const tablenr2= parseInt(tablenr,10);
-      const matchingTable = data.find(table => table.tabNum === tablenr2);
+      const cos=parseInt(tablenr,10);
+      const matchingTable = data.find(table => table.tabNum === cos);
       if (matchingTable) {
-        postOrder(matchingTable.tabId, restaurantId);
+        postOrder(matchingTable.tabId, restaurantId,cos);
       } else {
         console.error('Nie ma takiego numeru stolika dla tej restauracji:', tablenr);
-        delay(2000).then(() => console.clear());
         setShowLoginForm(true);
       }
 
