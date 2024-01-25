@@ -150,10 +150,11 @@ const AdminPage = ({ route }) => {
 
     const handleDeleteWaiter = async (waiterId) => {
         try {
+            console.log("Usuwanie waitera o id"+ waiterId)
             const response = await fetch(`${config.endpoints.Waiter}/${waiterId}`, {
                 method: 'DELETE',
-            });
-
+                
+            });          
             if (response.status === 204) {
                 await fetchWaiterData();
             } else {

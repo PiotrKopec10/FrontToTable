@@ -102,7 +102,17 @@ const WaiterPageStyles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
 
-  }
+  },
+  detailsButton: {
+    backgroundColor: 'orange', 
+    padding: 10,
+    borderRadius: 8,
+    marginTop: 8, 
+  },
+  detailsButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
 });
 
 export default WaiterPageStyles;
