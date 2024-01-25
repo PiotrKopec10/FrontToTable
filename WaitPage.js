@@ -1,6 +1,5 @@
 import React, { useEffect} from 'react';
 import { View, Text } from 'react-native';
- import GifImage from '@lowkey/react-native-gif';
 import WaitPageStyles from './styles/WaitPageStyles.js'
 
   const WaitPage = ({ route, navigation }) => {
