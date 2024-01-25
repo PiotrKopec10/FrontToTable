@@ -58,6 +58,13 @@ const CartPage = ({ route, navigation }) => {
     }
   };
 
+   const handleQuantityChange = (itemId, newQuantity) => {
+    const itemIndex = cartItems.findIndex((item) => item.itemId === itemId);
+    const updatedCart = [...cartItems];
+    updatedCart[itemIndex].itemQuantity = Math.max(1, newQuantity);  
+    setCartItems(updatedCart);
+  };
+
   const renderPaymentConfirmationModal = () => (
     <Modal
       visible={isPaymentConfirmationModalVisible}
@@ -111,7 +118,6 @@ const CartPage = ({ route, navigation }) => {
         ) : null}
       </View>
     </Modal>
-
   );
 
   return (
@@ -120,20 +126,39 @@ const CartPage = ({ route, navigation }) => {
     <Text style={[CartPageStyles.header, {fontSize: 33}]}>Twoje zamówienie</Text>
     <Text style={[CartPageStyles.header, {fontSize: 28, color: '#2ecc71'}]}>{calculateTotal()}</Text>
     <FlatList
-      data={cartItems}
-      keyExtractor={(item) => item.itemId.toString()}
-      renderItem={({ item }) => (
-        <View style={CartPageStyles.itemContainer}>
-          <Image style={CartPageStyles.image} source={{ uri: item.product.imageUrl }} />
-          <View style={CartPageStyles.detailsContainer}>
-            <Text style={CartPageStyles.productName}>{item.product.productName}</Text>
-            <Text style={CartPageStyles.productDescription}>{item.product.productDescription}</Text>
-            <Text style={CartPageStyles.productPrice}>{`Cena: ${item.product.productPrice} zł`}</Text>
-            <Text style={CartPageStyles.quantity}>{`Ilość: ${item.itemQuantity}`}</Text>
-          </View>
+  data={cartItems}
+  keyExtractor={(item) => item.itemId.toString()}
+  renderItem={({ item }) => (
+    <View style={CartPageStyles.itemContainer}>
+      <Image style={CartPageStyles.image} source={{ uri: item.product.imageUrl }} />
+      <View style={CartPageStyles.detailsContainer}>
+        <Text style={CartPageStyles.productName}>{item.product.productName}</Text>
+        <Text style={CartPageStyles.productDescription}>{item.product.productDescription}</Text>
+        <Text style={CartPageStyles.productPrice}>{`Cena: ${item.product.productPrice} zł`}</Text>
+        <View style={CartPageStyles.quantityContainer}>
+          <TouchableOpacity
+            style={CartPageStyles.arrowButton}
+            onPress={() => handleQuantityChange(item.itemId, item.itemQuantity - 1)}
+          >
+            <Text style={CartPageStyles.arrowButtonText}> - </Text>
+          </TouchableOpacity>
+          <TextInput
+            style={CartPageStyles.quantityInput}
+            keyboardType="numeric"
+            value={item.itemQuantity.toString()}
+            onChangeText={(text) => handleQuantityChange(item.itemId, parseInt(text, 10))}
+          />
+          <TouchableOpacity
+            style={CartPageStyles.arrowButton}
+            onPress={() => handleQuantityChange(item.itemId, item.itemQuantity + 1)}
+          >
+            <Text style={CartPageStyles.arrowButtonText}> + </Text>
+          </TouchableOpacity>
         </View>
-      )}
-    />
+      </View>
+    </View>
+  )}
+/>
       <Text style={[CartPageStyles.modalHeader, { fontSize: 20, fontWeight: 'bold', marginBottom: 12, paddingLeft: 10, color: 'black' }]}>Wybierz sposób płatności:</Text>
       <View style={CartPageStyles.box}>
         <TouchableOpacity

@@ -163,6 +163,32 @@ const CartPageStyles = StyleSheet.create({
     height: 95,
     alignSelf: 'center',
   },
+  quantityContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 5,
+    paddingLeft: 80,
+  },
+  quantityInput: {
+    width: 40,
+    height: 30,
+    borderWidth: 1.5,
+    borderRadius: 5,
+    textAlign: 'center',
+    marginLeft: 6,
+    marginRight: 6,
+  },
+  arrowButton: {
+    paddingHorizontal: 8,
+    backgroundColor: '#171716',
+    borderRadius: 5,
+  },
+  arrowButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 18,
+  },
+  
 });
 
 export default CartPageStyles;
