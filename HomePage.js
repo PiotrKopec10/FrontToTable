@@ -49,19 +49,38 @@ const HomePage = ({route,  navigation }) => {
     .then(data => {
       setApiData(data);
     });
-  
-    
-    
   }
   
-
+  const getCategoryName = (categoryValue) => {
+    switch (categoryValue) {
+      case 0:
+        return 'Dania główne';
+      case 1:
+        return 'Zupy';
+      case 2:
+        return 'Przystawki';
+      case 3:
+        return 'Napoje';
+      case 4:
+        return 'Dodatki';
+      default:
+        return 'Dania główne';
+    }
+  };
+  
   const menuItems = apiData.map((item) => ({
     id: item.productId.toString(),
     name: item.productName,
-    category: item.productStatus,
+    category: getCategoryName(item.productCategory),
     image: { uri: item.imageUrl },
     price: item.productPrice,
   }));
+
+//MainCourse,
+//Soup,
+//Starters,
+//Beverages,
+//Extras
 
   const filteredMenuItems = selectedCategory
     ? menuItems.filter(item => item.category === selectedCategory)
