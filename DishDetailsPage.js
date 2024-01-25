@@ -102,9 +102,8 @@ const DishDetails = ({ route, navigation }) => {
           </View>
           <View style={DishDetailsStyles.dishInfoContainer}>
             <View style={DishDetailsStyles.dishBorder}>
+            <Text style={DishDetailsStyles.dishName}>{dishDetails.name}</Text>
               <Text style={DishDetailsStyles.dishPrice}>{`${dishDetails.price.toFixed(2)}zł`}</Text>
-              <Text style={DishDetailsStyles.dishName}>{dishDetails.name}</Text>
-              <Text style={DishDetailsStyles.dishCategory}>{dishDetails.category}</Text>
               {dishDetails.additionalInfo && (
                 <Text style={DishDetailsStyles.additionalInfo}>{dishDetails.additionalInfo}</Text>
               )}
