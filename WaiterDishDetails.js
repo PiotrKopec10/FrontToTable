@@ -3,7 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, FlatList, Image, Modal } from 
 import CartPageStyles from './styles/CartPageStyles';
 
 const CartPage = ({ route, navigation }) => {
-  const { orderId } = route.params;  
+  const { orderId,paymentMethod } = route.params;  
   const [cartItems, setCartItems] = useState([]);
   const [isPaymentModalVisible, setIsPaymentModalVisible] = useState(false);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('');
@@ -28,17 +28,31 @@ const CartPage = ({ route, navigation }) => {
         console.error('Błąd wykonania żądania:', error.message);
       }
     };
-
+  
+    const fetchOrderData = async () => {
+      try {
+        const response = await fetch(`http://localhost:5111/api/Order/${orderId}`);
+        if (response.ok) {
+          const orderData = await response.json();
+          setOrderData(orderData);
+          setOrderNote(orderData.orderComment || ''); 
+        } else {
+          console.error('Błąd pobierania danych o zamówieniu.');
+        }
+      } catch (error) {
+        console.error('Błąd wykonania żądania:', error.message);
+      }
+    };
+  
     fetchOrderItems();
+    fetchOrderData();
   }, [orderId]);
+  
 
   const calculateTotal = () => {
     return cartItems.reduce((total, item) => total + item.itemQuantity * item.product.productPrice, 0).toFixed(2) + ' zł';
   };
 
-  const handleGoBack = () => {
-    navigation.navigate('Menu', { orderId: orderId });
-  };
   
   const handleRemoveItem = (itemId) => {
     console.log(`Usuwanie dania o ID: ${itemId}`);
@@ -74,56 +88,6 @@ const CartPage = ({ route, navigation }) => {
     setIsNoteModalVisible(true);
   };
 
-  const handlePickPayment= (paymentMethod ) => {
-    fetch(`http://localhost:5111/api/Order/${orderId}`, {
-      method: 'GET',
-      headers: {
-        'accept': 'application/json',
-      },
-    })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Błąd pobierania danych o orderze');
-        }
-        return response.json();
-      })
-      .then(data => {
-        setOrderData(data);
-        console.log(data);
-        const updatedOrderData = { ...data, paymentMethod:paymentMethod };
-        console.log(updatedOrderData);
-        // Send a PUT request to update the order with the modified data
-        fetch(`http://localhost:5111/api/Order/${orderId}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(updatedOrderData),
-        })
-          .then(response => {
-            if (!response.ok) {
-              throw new Error('Błąd aktualizacji danych ordera');
-            }
-            return response.text();
-          })
-          .then(updatedData => {
-            console.log('Order updated successfully.');
-            if (updatedData) {
-              console.log('Response from the server:', updatedData);
-            } else {
-              console.log('Response from the server is empty.');
-            }
-          })
-          .catch(error => {
-            console.error('Error updating order:', error);
-          });
-      })
-      .catch(error => {
-        console.error('Error fetching order data:', error);
-      });
-
-    };
-
   const handleSaveNote = () => {
 fetch(`http://localhost:5111/api/Order/${orderId}`, {
   method: 'GET',
@@ -141,7 +105,7 @@ fetch(`http://localhost:5111/api/Order/${orderId}`, {
     // Assuming you have a state variable orderData to store the fetched order data
     setOrderData(data);
 console.log(data);
-    const updatedOrderData = { ...data, orderComment:orderNote };
+    const updatedOrderData = { ...data, orderComment:orderNote};
     console.log(updatedOrderData);
     // Send a PUT request to update the order with the modified data
     fetch(`http://localhost:5111/api/Order/${orderId}`, {
@@ -210,7 +174,7 @@ console.log(data);
 
   const handlePaymentConfirmation = () => {
     setIsPaymentConfirmationModalVisible(false);
-  handlePickPayment(selectedPaymentMethod);
+
     // Przykładowa logika potwierdzenia płatności
     console.log(`Potwierdzono płatność metodą: ${selectedPaymentMethod}`);
     console.log(`Kwota do zapłacenia: ${calculateTotal()}`);
@@ -218,7 +182,6 @@ console.log(data);
     if (selectedPaymentMethod === 'BLIK') {
       console.log(`Kod BLIK: ${blikCode}`);
     }
-    navigation.navigate('Wait',{orderId:orderId});
   };
 
    const handleQuantityChange = (itemId, newQuantity) => {
@@ -300,9 +263,14 @@ console.log(data);
   return (
     <View style={CartPageStyles.container}>
     <Image source={require('./photo/logo.png')} style={[CartPageStyles.logo, {marginBottom: 15}]} />
-    <Text style={[CartPageStyles.header, {fontSize: 33}]}>Twoje zamówienie</Text>
+    <Text style={[CartPageStyles.header, {fontSize: 33}]}>Zamówienie ID: {orderId}</Text>
     <Text style={[CartPageStyles.header, {fontSize: 28, color: '#2ecc71'}]}>{calculateTotal()}</Text>
+    <Text style={CartPageStyles.header}>
+        Metoda płatności: {paymentMethod}
+      </Text>
+
     <FlatList
+    
         data={cartItems}
         keyExtractor={(item) => item.itemId.toString()}
         renderItem={({ item }) => (
@@ -342,6 +310,8 @@ console.log(data);
           </View>
         )}
       />
+
+
 
 <TouchableOpacity
         style={CartPageStyles.noteButton}
@@ -392,9 +362,6 @@ console.log(data);
             style={[CartPageStyles.paymentMethodImage, { tintColor: '#FFFFFF' }]}
           />
           <Text style={CartPageStyles.paymentMethodButtonText}>Karta kredytowa</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={handleGoBack} style={CartPageStyles.cancelButton}>
-          <Text style={CartPageStyles.cancelButtonText}>Cofnij</Text>
         </TouchableOpacity>
       </View>
       {renderPaymentConfirmationModal()}

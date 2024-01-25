@@ -1,13 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, TouchableWithoutFeedback, ImageBackground, TouchableOpacity, } from 'react-native';
 import WaiterPageStyles from './styles/WaiterPageStyles';
+import { useNavigation } from '@react-navigation/native';
 import config from './config';
 
 const WaiterPage = ({ route }) => {
     const [orders, setOrders] = useState([]);
     const [expandedSections, setExpandedSections] = useState([]);
+    const [orderItems, setOrderItems] = useState([]);
+    const [orderId, setOrderId] = useState('');
 
-    const { waiterId, restaurantId } = route.params;
+    const navigation = useNavigation(); 
+
+    const { waiterId, restaurantId} = route.params;
     console.log(waiterId);
     console.log(restaurantId);
 
@@ -40,15 +45,17 @@ const WaiterPage = ({ route }) => {
         fetchOrders();
     }, [restaurantId]);
 
+
     const toggleSection = (orderId) => {
-        const newExpandedSections = [...expandedSections];
-        if (newExpandedSections.includes(orderId)) {
-            const indexToRemove = newExpandedSections.indexOf(orderId);
-            newExpandedSections.splice(indexToRemove, 1);
+        const newExpandedSections = [orderId];
+        setOrderId(orderId);
+    
+        if (!expandedSections.includes(orderId)) {
+            setExpandedSections(newExpandedSections);
         } else {
-            newExpandedSections.push(orderId);
+            setExpandedSections([]);
+            setOrderId('');
         }
-        setExpandedSections(newExpandedSections);
     };
 
     const acceptOrder = async (orderId) => {
@@ -143,10 +150,11 @@ const WaiterPage = ({ route }) => {
         const orderDate = new Date(item.orderTime);
         const formattedOrderDate = `${orderDate.getDate()}-${orderDate.getMonth() + 1}-${orderDate.getFullYear()} ${orderDate.getHours()}:${orderDate.getMinutes()}:${orderDate.getSeconds()}`;
 
+
+       
         if (item.orderStatus !== 0 && item.orderStatus !== 1) {
             return null;
         }
-
         return (
             <View style={WaiterPageStyles.orderItemContainer}>
                 <Text>{`Order ID: ${item.orderId}`}</Text>
@@ -157,27 +165,34 @@ const WaiterPage = ({ route }) => {
                 <Text>{`Table Number: ${item.tableId}`}</Text>
                 {item.orderStatus === 1 ? (
                     <View>
-                        <Text style={WaiterPageStyles.newOrder}>Zamówienie zaakceptowane</Text>
-                        <TouchableOpacity onPress={() => MakeReadyOrder(item.orderId)}>
-                            <View style={WaiterPageStyles.readyButton}>
-                                <Text style={WaiterPageStyles.readyButtonText}>Zaznacz jako gotowe</Text>
-                            </View>
-                        </TouchableOpacity>
-                    </View>
+                    <Text style={WaiterPageStyles.newOrder}>Zamówienie zaakceptowane</Text>
+                    <TouchableOpacity onPress={() => MakeReadyOrder(item.orderId)}>
+                        <View style={WaiterPageStyles.readyButton}>
+                            <Text style={WaiterPageStyles.readyButtonText}>Zaznacz jako gotowe</Text>
+                        </View>
+                    </TouchableOpacity>
 
-                ) : item.orderStatus === 0 ? (
-                    <View>
-                        <Text style={WaiterPageStyles.newOrder}>Nowe zamówienie</Text>
-                        <TouchableOpacity onPress={() => acceptOrder(item.orderId)}>
-                            <View style={WaiterPageStyles.acceptButton}>
-                                <Text style={WaiterPageStyles.acceptButtonText}>Akceptuj</Text>
-                            </View>
-                        </TouchableOpacity>
-                    </View>
-                ) : null}
-            </View>
-        );
-    };
+                    {/* Add the "Szczegóły Zamówienia" button */}
+                    <TouchableOpacity onPress={() => navigation.navigate('WaiterDishDetails', { orderId: item.orderId, paymentMethod:item.paymentMethod })}>
+                        <View style={WaiterPageStyles.detailsButton}>
+                            <Text style={WaiterPageStyles.detailsButtonText}>Szczegóły Zamówienia</Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
+
+            ) : item.orderStatus === 0 ? (
+                <View>
+                    <Text style={WaiterPageStyles.newOrder}>Nowe zamówienie</Text>
+                    <TouchableOpacity onPress={() => acceptOrder(item.orderId)}>
+                        <View style={WaiterPageStyles.acceptButton}>
+                            <Text style={WaiterPageStyles.acceptButtonText}>Akceptuj</Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
+            ) : null}
+        </View>
+    );
+};
 
 
     return (
@@ -203,8 +218,6 @@ const WaiterPage = ({ route }) => {
                         </View>
                     )}
                 />
-                
-
             </ImageBackground>
         </View>
     );
