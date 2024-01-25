@@ -8,7 +8,6 @@ import DishDetailsPage from './DishDetailsPage';
 import AdminPage from './AdminPage';
 import WaitPage from './WaitPage'; 
 import WaiterPage from './WaiterPage'; 
-import WaiterDishDetails from './WaiterDishDetails.js';
 import { AuthProvider } from './AuthContext.js'; 
 
 const Stack = createStackNavigator();

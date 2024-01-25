@@ -2,20 +2,13 @@ import React, { useState, useContext } from 'react';
 import { View, Text, Button, Image, TextInput } from 'react-native';
 import { RadioButton } from 'react-native-paper';
 import LoginPageStyle from './styles/LoginPageStyles';
+import wait from './photo/wait.gif';
+import GifImage from '@lowkey/react-native-gif';
 
 const WaitPage = ({ navigation }) => {
   const [tablenr, setTableNr] = useState('');
   const [restaurantId, setRestaurantId] = useState('');
 
-  const OrderConfirmationPage = () => {
-    return (
-      <Text className="order-confirmation">
-        Dziękujemy za złożenie zamówienia
-        Zamówienie jest w trakcie przygotowywania
-        <img src="loading.gif" alt="Loading" />
-      </Text>
-    );
-  };
 
 const handleStart =() => {
     fetch(`http://localhost:5111/api/Table/restaurant/${restaurantId}`, {
@@ -42,12 +35,24 @@ const handleStart =() => {
     });
 };
 
-return (
-    <div className="App">
-      <OrderConfirmationPage />
-    </div>
-  );
 
+    return (
+        <View>
+          <GifImage
+            source={{
+              uri:
+                'https://www.superiorlawncareusa.com/wp-content/uploads/2020/05/loading-gif-png-5.gif',
+            }}
+            style={{
+              width: 100,
+              height: 100,
+            }}
+            resizeMode={'cover'}
+          />
+          <Text className="order-confirmation">
+            Dziękujemy za złożenie zamówienia. Zamówienie jest w trakcie przygotowywania.
+          </Text>
+        </View>
+      );
 }
-
 export default WaitPage;
