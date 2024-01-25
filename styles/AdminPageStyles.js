@@ -278,7 +278,11 @@ const AdminPageStyles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
   },
-  
+  manageButton: {
+    padding: 8,
+    backgroundColor: '#2196F3',
+    borderRadius: 8,
+  },
 });
 
 export default AdminPageStyles;
