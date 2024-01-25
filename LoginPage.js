@@ -13,6 +13,9 @@ const LoginPage = ({ navigation }) => {
   const [showLoginForm, setShowLoginForm] = useState(true);
 const [error, setError] = useState(null);
 
+function delay(time) {
+  return new Promise(resolve => setTimeout(resolve, time));
+}
 
 const handleLogin = () => {
   if (role === 'restaurant') {
@@ -25,7 +28,7 @@ const handleLogin = () => {
       })
       .then(data => {
         console.log('Zalogowano jako restaurant. id restauracji:', data.restaurantId);
-        console.log(data);
+
         setRestaurantId(data.restaurantId);
         setShowLoginForm(false);
       })
@@ -92,6 +95,7 @@ const postOrder =(tableId,restaurantId)=>{
 }
 
 const handleStart =() => {
+
     fetch(`http://localhost:5111/api/Table/restaurant/${restaurantId}`, {
       method: 'GET',
       headers: {
@@ -104,14 +108,13 @@ const handleStart =() => {
       return response.json();
     })
     .then(data => {
-      const matchingTable = data.find(table => table.tabNum === tablenr);
-
+      const tablenr2= parseInt(tablenr,10);
+      const matchingTable = data.find(table => table.tabNum === tablenr2);
       if (matchingTable) {
-        console.log(matchingTable);
-        console.log(matchingTable.tabId);
         postOrder(matchingTable.tabId, restaurantId);
       } else {
         console.error('Nie ma takiego numeru stolika dla tej restauracji:', tablenr);
+        delay(2000).then(() => console.clear());
         setShowLoginForm(true);
       }
 
