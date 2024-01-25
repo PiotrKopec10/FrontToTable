@@ -15,9 +15,9 @@ const CartPageStyles = StyleSheet.create({
     marginBottom: 16,
   },
   image: {
-    width: 80,
-    height: 80,
-    marginRight: 16,
+    width: 105,
+    height: 105,
+    marginRight: 20,
   },
   detailsContainer: {
     flex: 1,
