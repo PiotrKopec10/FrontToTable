@@ -14,9 +14,9 @@ const DishDetails = ({ route, navigation }) => {
     price: 0,
     additionalInfo: '',
   });
-
-
+  const [totalCartItems, setTotalCartItems] = React.useState(0);
   useEffect(() => {
+    getTotalCartItems(orderId);
     if (dishId) {
       const getDishDetailsById = async () => {
         try {
@@ -43,15 +43,57 @@ const DishDetails = ({ route, navigation }) => {
     }
   }, [dishId]);
 
+  const handleOrderPress = () => {
+    navigation.navigate('Order', { orderId: orderId });
+  };
+
+   
+
+  // const addToCart = (product) => {
+  //   const existingItem = cartItems.find((item) => item.id === product.id);
+  //   if (existingItem) {
+  //     setCartItems(
+  //       cartItems.map((item) =>
+  //         item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+  //       )
+  //     );
+  //   } else {
+  //     setCartItems([...cartItems, { ...product, quantity: 1 }]);
+  //   }
+  // };
+
+  const getTotalCartItems = async (orderId) => {
+    try {
+      const response = await fetch(`http://localhost:5111/api/OrderItem/AllItems?orderId=${orderId}`);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch order items. Status: ${response.status}`);
+      }
+  
+      const orderItems = await response.json();
+      const totalItems = orderItems.reduce((total, item) => total + item.itemQuantity, 0);
+      setTotalCartItems(totalItems);
+    } catch (error) {
+      console.error('Error fetching order items:', error);
+      // Handle the error or return a default value
+      setTotalCartItems(0);
+    }
+  };
+
+
+    const [numberInput, setNumberInput] = useState('');
+    const handleTextChange = (text) => {
+      // Allow only numeric input
+      const numericInput = text.replace(/[^0-9]/g, '');
+      setNumberInput(numericInput);
+    };
+
   const handleOrder = async () => {
     try {
-
       if (!orderId || !dishId) {
         console.error('orderId or dishId is missing.');
         alert('Błąd podczas zamawiania. Spróbuj ponownie.');
         return;
       }
-  
       // Wywołanie POST na endpoint /api/OrderItem/ProductToOrder
       const response = await fetch('http://localhost:5111/api/OrderItem/Post', {
         method: 'POST',
@@ -67,7 +109,8 @@ const DishDetails = ({ route, navigation }) => {
       });
   
       if (response.ok) {
-        // Przetwarzanie odpowiedzi, jeśli to konieczne
+        
+        getTotalCartItems(orderId);
         console.log('Zamówienie produktów pomyślnie dodane do zamówienia.');
       } else {
         const errorMessage = await response.text();
@@ -87,13 +130,25 @@ const DishDetails = ({ route, navigation }) => {
 
   return (
     <ImageBackground source={require('./photo/BG1.png')} style={DishDetailsStyles.container}>
-      {/* Sekcja Logo */}
+      {/* Sekcja Logo i Przycisk Koszyka */}
       <View style={[HomePageStyles.sectionContainer, HomePageStyles.headerContainer]}>
+        {/* Przycisk Koszyka */}
+        <TouchableOpacity onPress={handleOrderPress} style={DishDetailsStyles.toCartButton}>
+  <View style={DishDetailsStyles.container2}>
+    <Image source={require('./photo/cart.png')} style={DishDetailsStyles.cartImage} />
+    <Text style={DishDetailsStyles.cartText}>Koszyk: {totalCartItems}</Text>
+    <Text style={DishDetailsStyles.input} value={numberInput} onChangeText={handleTextChange} />
+  </View>
+</TouchableOpacity>
+
+
+
+        {/* Logo */}
         <View style={HomePageStyles.orderContainer}>
           <Image source={require('./photo/logo.png')} style={[HomePageStyles.order, { marginBottom: 15 }]} />
         </View>
       </View>
-  
+
       {/* Sekcja Dania */}
       <View style={DishDetailsStyles.dishSectionContainer}>
         <View style={DishDetailsStyles.dishImageContainer}>
@@ -102,7 +157,7 @@ const DishDetails = ({ route, navigation }) => {
           </View>
           <View style={DishDetailsStyles.dishInfoContainer}>
             <View style={DishDetailsStyles.dishBorder}>
-            <Text style={DishDetailsStyles.dishName}>{dishDetails.name}</Text>
+              <Text style={DishDetailsStyles.dishName}>{dishDetails.name}</Text>
               <Text style={DishDetailsStyles.dishPrice}>{`${dishDetails.price.toFixed(2)}zł`}</Text>
               {dishDetails.additionalInfo && (
                 <Text style={DishDetailsStyles.additionalInfo}>{dishDetails.additionalInfo}</Text>
@@ -110,13 +165,13 @@ const DishDetails = ({ route, navigation }) => {
             </View>
           </View>
         </View>
-        
+
         {/* Przycisk Zamówienia */}
         <TouchableOpacity onPress={handleOrder} style={DishDetailsStyles.addToMenuButton}>
-          <Image source={require('./photo/add.png')} style={DishDetailsStyles.photo} tintColor="#FFD983"/>
+          <Image source={require('./photo/add.png')} style={DishDetailsStyles.photo} tintColor="#FFD983" />
           <Text style={[DishDetailsStyles.addToMenuText, { color: '#FFD983' }]}>Dodaj do Zamówienia</Text>
         </TouchableOpacity>
-  
+
         {/* Przycisk Powrotu do Menu */}
         <TouchableOpacity onPress={handleGoBack} style={DishDetailsStyles.goBackButton}>
           <Image source={require('./photo/back.png')} style={DishDetailsStyles.backIcon} tintColor="#FFD983" />
