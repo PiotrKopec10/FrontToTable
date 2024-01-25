@@ -11,16 +11,12 @@ const AdminPage = ({ route }) => {
     const [waiterData, setWaiterData] = useState([]);
     const [isAddTableModalVisible, setIsAddTableModalVisible] = useState(false);
     const [tableData, setTableData] = useState([]);
-
-
-
     const [newTable, setNewTable] = useState({
         tabId: 0,
         tabNum: 0,
         tabStatus: true,
         restaurantId: restaurantId,
     });
-
 
     const [newProduct, setNewProduct] = useState({
         productName: '',

@@ -218,6 +218,7 @@ console.log(data);
     if (selectedPaymentMethod === 'BLIK') {
       console.log(`Kod BLIK: ${blikCode}`);
     }
+    navigation.navigate('Wait',{orderId:orderId});
   };
 
    const handleQuantityChange = (itemId, newQuantity) => {

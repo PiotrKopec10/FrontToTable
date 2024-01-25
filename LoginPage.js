@@ -11,7 +11,29 @@ const LoginPage = ({ navigation }) => {
   const [restaurantId, setRestaurantId] = useState('');
 
   const [showLoginForm, setShowLoginForm] = useState(true);
+  const [waitScreen, setWaitScreen] = useState(false);
 const [error, setError] = useState(null);
+
+const checkStatus=() =>{
+
+  fetch(`http://localhost:5111/api/Order/${orderId}`, {
+    method: 'GET',
+    headers: {
+      'accept': 'text/plain',
+    },
+  }).then(response => {
+    if (!response.ok) {
+      throw new Error('Błąd logowania pobierania restaurantId');
+    }
+    return response.json();
+  })
+    .then(dane => {
+      
+      console.log("nazwa restauracji",dane.restaurantName)
+      setRestaurantName(dane.restaurantName);
+    });
+
+};
 
 const handleLogin = () => {
   if (role === 'restaurant') {
@@ -202,6 +224,7 @@ const handleStart =() => {
       />
     </View>
   )}
+
 </View>
 
   );

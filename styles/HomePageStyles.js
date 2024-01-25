@@ -113,7 +113,7 @@ const HomePageStyles = StyleSheet.create({
   cancelOrderContainer: {
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
-    backgroundColor: '#DDDDDD',
+    backgroundColor: '#FF6666',
     position: 'absolute',
     borderRadius: 5,
     paddingVertical: 10,
