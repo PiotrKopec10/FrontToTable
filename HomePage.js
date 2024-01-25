@@ -7,34 +7,80 @@ const HomePage = ({route,  navigation }) => {
   const { orderId } = route.params;
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [apiData, setApiData] = useState([]);
+  const [restaurantId, setRestaurantId] = useState('');
+
 
   useEffect(() => {
-    const fetchData = async () => {
       try {
-        const response = await fetch(config.endpoints.Product, {
+         fetch(`${config.endpoints.Order}/${orderId}`, {
           method: 'GET',
           headers: {
             'accept': 'text/plain',
           },
+        }).then(response => {
+          if (!response.ok) {
+            throw new Error('Błąd logowania pobierania restaurantId');
+          }
+          return response.json();
+        })
+        .then(data => {
+          setRestaurantId(data.restaurantId);
+          getProducts(data.restaurantId);
         });
-
-        const result = await response.json();
-        setApiData(result);
+        // Fetch product data based on restaurantId
       } catch (error) {
         console.error('Error fetching data:', error);
       }
-    };
+    }
+  , [orderId, restaurantId]);
 
-    fetchData();
-  }, []);
-
+  const getProducts = (restaurantId) =>{
+  fetch(`http://localhost:5111/api/Product/restaurant/${restaurantId}`, {
+      method: 'GET',
+      headers: {
+        'accept': 'text/plain',
+      },
+    }).then(response => {
+      if (!response.ok) {
+        throw new Error('Błąd pobierania produktów po restaurantId');
+      }
+      return response.json();
+    })
+    .then(data => {
+      setApiData(data);
+    });
+  }
+  
+  const getCategoryName = (categoryValue) => {
+    switch (categoryValue) {
+      case 0:
+        return 'Dania główne';
+      case 1:
+        return 'Zupy';
+      case 2:
+        return 'Przystawki';
+      case 3:
+        return 'Napoje';
+      case 4:
+        return 'Dodatki';
+      default:
+        return 'Dania główne';
+    }
+  };
+  
   const menuItems = apiData.map((item) => ({
     id: item.productId.toString(),
     name: item.productName,
-    category: item.productStatus,
+    category: getCategoryName(item.productCategory),
     image: { uri: item.imageUrl },
     price: item.productPrice,
   }));
+
+//MainCourse,
+//Soup,
+//Starters,
+//Beverages,
+//Extras
 
   const filteredMenuItems = selectedCategory
     ? menuItems.filter(item => item.category === selectedCategory)

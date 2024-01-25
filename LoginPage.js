@@ -10,10 +10,12 @@ const LoginPage = ({ navigation }) => {
   const [role, setRole] = useState('waiter');
   const [restaurantId, setRestaurantId] = useState('');
 
-
   const [showLoginForm, setShowLoginForm] = useState(true);
 const [error, setError] = useState(null);
 
+function delay(time) {
+  return new Promise(resolve => setTimeout(resolve, time));
+}
 
 const handleLogin = () => {
   if (role === 'restaurant') {
@@ -25,8 +27,8 @@ const handleLogin = () => {
         return response.json();
       })
       .then(data => {
-        console.log('Zalogowano jako restaurant. id restauracji::', data.restaurantId);
-        console.log(data);
+        console.log('Zalogowano jako restaurant. id restauracji:', data.restaurantId);
+
         setRestaurantId(data.restaurantId);
         setShowLoginForm(false);
       })
@@ -58,51 +60,65 @@ const handleLogin = () => {
   }
 };
 
+const postOrder =(tableId,restaurantId)=>{
 
-
-const handleStart = async () => {
-  try {
-
-    const response = await fetch('http://localhost:5111/api/order', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    
-      body: JSON.stringify({
-          orderId: 0,
-          orderTime: "2024-01-21T20:39:47.930Z",
-          orderStatus: 0,
-          orderComment: "",
-          paymentMethod: "", 
-          waiterId: null,
-          tableId: parseInt(tablenr,10),
-          restaurantId: restaurantId
-      }),
-    });
-
-    if (response.ok) {
-      const orderData = await response.json();
+  console.log(tableId);
+  console.log(restaurantId);
+  fetch('http://localhost:5111/api/order', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      orderId: 0,
+      orderTime: "2024-01-21T20:39:47.930Z",
+      orderStatus: 0,
+      orderComment: "",
+      paymentMethod: "",
+      waiterId: null,
+      tableId: tableId,
+      restaurantId: restaurantId
+    }),
+  })
+    .then(response => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        return response.text().then(errorMessage => Promise.reject(errorMessage));
+      }
+    })
+    .then(orderData => {
       const orderId = orderData.orderId;
-
       console.log('Zamówienie rozpoczęte pomyślnie, ID zamówienia:', orderId);
-
       navigation.navigate('Menu', { orderId: orderId });
-    } else {
-      const errorMessage = await response.text();
-      setError(errorMessage);
+    });
+}
 
-      console.error('Błąd podczas rozpoczynania zamówienia:', errorMessage);
+const handleStart =() => {
 
-      alert('Błąd podczas rozpoczynania zamówienia. Spróbuj ponownie.');
-    }
-  } catch (error) {
-    setError(error.message);
+    fetch(`http://localhost:5111/api/Table/restaurant/${restaurantId}`, {
+      method: 'GET',
+      headers: {
+        'accept': 'text/plain',
+      },
+    }).then(response => {
+      if (!response.ok) {
+        throw new Error('Błąd logowania pobierania restaurantId');
+      }
+      return response.json();
+    })
+    .then(data => {
+      const tablenr2= parseInt(tablenr,10);
+      const matchingTable = data.find(table => table.tabNum === tablenr2);
+      if (matchingTable) {
+        postOrder(matchingTable.tabId, restaurantId);
+      } else {
+        console.error('Nie ma takiego numeru stolika dla tej restauracji:', tablenr);
+        delay(2000).then(() => console.clear());
+        setShowLoginForm(true);
+      }
 
-    console.error('Błąd wykonania żądania:', error.message);
-
-    alert('Wystąpił błąd. Spróbuj ponownie.');
-  }
+    });
 };
 
   return (

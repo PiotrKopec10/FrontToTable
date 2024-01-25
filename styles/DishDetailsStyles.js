@@ -39,27 +39,22 @@ const DishDetailsStyles = StyleSheet.create({
     padding: 16,
   },
   dishName: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: 'bold',
     marginBottom: 8,
     textAlign: 'left',
-  },
-  dishCategory: {
-    fontSize: 18,
-    color: '#555',
-    marginBottom: 8,
-    textAlign: 'left',
+    color: 'white',
   },
   dishPrice: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: 'bold',
     color: '#2ecc71',
     marginBottom: 16,
     textAlign: 'left',
   },
   additionalInfo: {
-    fontSize: 16,
-    color: '#888',
+    fontSize: 18,
+    color: '#FFD983',
     textAlign: 'left',
   },
   addToMenuButton: {
