@@ -98,6 +98,34 @@ const HomePageStyles = StyleSheet.create({
   sectionContainer: {
     marginBottom: 16,
   },
+  loginMessageContainer: {
+    position: 'absolute',
+    marginTop: 6, 
+    right: 10, 
+  },
+
+  loginMessageText: {
+    fontSize: 16,
+    color: '#454545',
+    fontWeight: 'bold',
+  },
+
+  cancelOrderContainer: {
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+    backgroundColor: '#DDDDDD',
+    position: 'absolute',
+    borderRadius: 5,
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    marginTop: 2, 
+    marginLeft: 10, 
+  },
+
+  cancelOrderText: {
+    fontSize: 16,
+    color: '#333333',
+  },
 });
 
 export default HomePageStyles;

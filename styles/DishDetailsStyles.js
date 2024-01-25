@@ -89,6 +89,53 @@ const DishDetailsStyles = StyleSheet.create({
     height: 30,
     marginRight: 8,
   },
+  paymentMethodImage: {
+    height: 40,
+    width: 40,
+    tintColor: 'black' 
+  },
+
+  backgroundImage: {
+    position: 'absolute',
+    width: '120',
+    height: '120',
+    resizeMode: 'cover',
+    backgroundColor:'white',
+  },
+  toCartButton: {
+    position: 'absolute',
+    top: 20,
+    right: 20,
+    zIndex: 999,
+  },
+  
+  container2: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FFF',
+    padding: 10,
+    borderRadius: 10,
+    elevation: 2,
+    
+  },
+  
+  cartImage: {
+    width: 24,
+    height: 24,
+    marginRight: 10,
+  },
+  
+  input: {
+    flex: 1,
+    fontSize: 16,
+    color: '#000',
+  },
+  
+  cartText: {
+    fontSize: 16,
+    color: '#000',
+    marginRight: 10,
+  },
 });
 
 export default DishDetailsStyles;
