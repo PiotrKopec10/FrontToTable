@@ -1,58 +1,57 @@
-import React, { useState, useContext } from 'react';
-import { View, Text, Button, Image, TextInput } from 'react-native';
-import { RadioButton } from 'react-native-paper';
-import LoginPageStyle from './styles/LoginPageStyles';
-import wait from './photo/wait.gif';
-import GifImage from '@lowkey/react-native-gif';
+import React, { useEffect} from 'react';
+import { View, Text } from 'react-native';
+ import GifImage from '@lowkey/react-native-gif';
+import WaitPageStyles from './styles/WaitPageStyles.js'
 
-const WaitPage = ({ navigation }) => {
-  const [tablenr, setTableNr] = useState('');
-  const [restaurantId, setRestaurantId] = useState('');
+  const WaitPage = ({ route, navigation }) => {
+    const { orderId } = route.params; 
 
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+          checkStatus();
+        }, 5000);
+        return () => clearInterval(intervalId);
+    }, []); 
 
-const handleStart =() => {
-    fetch(`http://localhost:5111/api/Table/restaurant/${restaurantId}`, {
+const checkStatus =() => {
+    fetch(`http://localhost:5111/api/Order/${orderId}`, {
       method: 'GET',
       headers: {
         'accept': 'text/plain',
       },
     }).then(response => {
       if (!response.ok) {
-        throw new Error('Błąd logowania pobierania restaurantId');
+        throw new Error('Błąd logowania pobierania Orderu');
       }
       return response.json();
     })
     .then(data => {
-      const cos=parseInt(tablenr,10);
-      const matchingTable = data.find(table => table.tabNum === cos);
-      if (matchingTable) {
-        postOrder(matchingTable.tabId, restaurantId,cos);
+      if (data.orderStatus===2) {
+        navigation.navigate('Login');
       } else {
-        console.error('Nie ma takiego numeru stolika dla tej restauracji:', tablenr);
-        setShowLoginForm(true);
+        console.error('Nie ma dalej żarcia' );
       }
-
     });
 };
 
 
-    return (
-        <View>
-          <GifImage
-            source={{
-              uri:
-                'https://www.superiorlawncareusa.com/wp-content/uploads/2020/05/loading-gif-png-5.gif',
-            }}
-            style={{
-              width: 100,
-              height: 100,
-            }}
-            resizeMode={'cover'}
-          />
-          <Text className="order-confirmation">
-            Dziękujemy za złożenie zamówienia. Zamówienie jest w trakcie przygotowywania.
-          </Text>
-        </View>
-      );
-}
+
+
+return (
+    <View style={WaitPageStyles.container}>
+      <GifImage
+        source={{
+          uri:
+            'https://www.superiorlawncareusa.com/wp-content/uploads/2020/05/loading-gif-png-5.gif',
+        }}
+        style={WaitPageStyles.gifImage}
+        resizeMode={'cover'}
+      />
+      <Text style={WaitPageStyles.orderConfirmation}>
+        Dziękujemy za złożenie zamówienia. Zamówienie jest w trakcie przygotowywania.
+      </Text>
+    </View>
+  );
+  }
+
 export default WaitPage;

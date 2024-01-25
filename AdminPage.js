@@ -11,12 +11,53 @@ const AdminPage = ({ route }) => {
     const [waiterData, setWaiterData] = useState([]);
     const [isAddTableModalVisible, setIsAddTableModalVisible] = useState(false);
     const [tableData, setTableData] = useState([]);
+
+    const fetchRestaurantLoginInfo = async () => {
+        try {
+          
+           const response = await fetch(`${config.endpoints.Restaurant}/${restaurantId}`);
+           const result = await response.json();
+           setRestaurantLoginInfo(result);
+
+        } catch (error) {
+          console.error('Error fetching restaurant login info:', error);
+        }
+      };
+
+
+  const handleUpdateLoginInfo = async () => {
+    try {
+            const response = await fetch(`${config.endpoints.Restaurant}/${restaurantId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(restaurantLoginInfo),
+            });
+
+        if (response.status === 200) {
+        console.log('Login information updated successfully');
+      } else {
+         console.error('Failed to update login information');
+       }
+    } catch (error) {
+      console.error('Error updating login information:', error);
+    }
+  };
+
+    const [restaurantLoginInfo, setRestaurantLoginInfo] = useState({
+        restaurantName: '',
+        login: '',
+        password: '',
+    });
+
     const [newTable, setNewTable] = useState({
         tabId: 0,
         tabNum: 0,
         tabStatus: true,
         restaurantId: restaurantId,
     });
+
 
     const [newProduct, setNewProduct] = useState({
         productName: '',
@@ -146,11 +187,10 @@ const AdminPage = ({ route }) => {
 
     const handleDeleteWaiter = async (waiterId) => {
         try {
-            console.log("Usuwanie waitera o id"+ waiterId)
             const response = await fetch(`${config.endpoints.Waiter}/${waiterId}`, {
                 method: 'DELETE',
-                
-            });          
+            });
+
             if (response.status === 204) {
                 await fetchWaiterData();
             } else {
@@ -397,9 +437,16 @@ const AdminPage = ({ route }) => {
                 </TouchableOpacity>
 
 
+                {/* Manage Login Info Button */}
+      <TouchableOpacity
+        style={[AdminPageStyles.manageButton, { margin: 15 }]}
+        onPress={() => setIsEditLoginModalVisible(true)}
+      >
+        <Text style={AdminPageStyles.addButtonText}>Zarządzaj logowaniem</Text>
+      </TouchableOpacity>
+
 
             </View>
-
             {/* Sekcja z menu produktów */}
             <View style={AdminPageStyles.sectionContainer}>
                 {/* Sekcja z danymi */}
@@ -647,7 +694,48 @@ const AdminPage = ({ route }) => {
                     </View>
                 </View>
             </Modal>
-
+      {/* Edit Login Info Modal */}
+      <Modal
+        visible={isEditLoginModalVisible}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => setIsEditLoginModalVisible(false)}
+      >
+        <View style={AdminPageStyles.modalContainer}>
+          <Text style={AdminPageStyles.modalHeader}>Zarządzaj logowaniem</Text>
+          <TextInput
+            style={AdminPageStyles.modalTextInput}
+            placeholder="Nazwa restauracji"
+            value={restaurantLoginInfo.restaurantName}
+            onChangeText={(text) => setRestaurantLoginInfo({ ...restaurantLoginInfo, restaurantName: text })}
+          />
+          <TextInput
+            style={AdminPageStyles.modalTextInput}
+            placeholder="Login"
+            value={restaurantLoginInfo.login}
+            onChangeText={(text) => setRestaurantLoginInfo({ ...restaurantLoginInfo, login: text })}
+          />
+          <TextInput
+            style={AdminPageStyles.modalTextInput}
+            placeholder="Hasło"
+            value={restaurantLoginInfo.password}
+            onChangeText={(text) => setRestaurantLoginInfo({ ...restaurantLoginInfo, password: text })}
+            secureTextEntry={true}
+          />
+          <TouchableOpacity
+            style={[AdminPageStyles.modalButton, { backgroundColor: '#2196F3' }]}
+            onPress={handleUpdateLoginInfo}
+          >
+            <Text style={[AdminPageStyles.modalButtonText, { backgroundColor: '#2196F3' }]}>Zapisz</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={AdminPageStyles.modalButton}
+            onPress={() => setIsEditLoginModalVisible(false)}
+          >
+            <Text style={AdminPageStyles.modalButtonText}>Anuluj</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
 
 
         </ImageBackground>
