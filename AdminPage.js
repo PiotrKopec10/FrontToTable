@@ -1,23 +1,46 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, FlatList, Image, Modal, TextInput, ImageBackground } from 'react-native';
 import AdminPageStyles from './styles/AdminPageStyles';
-import config  from './config';
+import config from './config';
 
-const AdminPage = ({route}) => {
+const AdminPage = ({ route }) => {
     const [apiData, setApiData] = useState([]);
     const [isAddModalVisible, setIsAddModalVisible] = useState(false);
-    const {  restaurantId } = route.params;
+    const [isAddWaiterModalVisible, setIsAddWaiterModalVisible] = useState(false);
+    const { restaurantId } = route.params;
+    const [waiterData, setWaiterData] = useState([]);
+    const [isAddTableModalVisible, setIsAddTableModalVisible] = useState(false);
+    const [tableData, setTableData] = useState([]);
+
+
+
+    const [newTable, setNewTable] = useState({
+        tabId: 0,
+        tabNum: 0,
+        tabStatus: true,
+        restaurantId: restaurantId,
+    });
+
+
     const [newProduct, setNewProduct] = useState({
         productName: '',
         productDescription: '',
         productPrice: 0,
-        productStatus: '',  
-        productCategory: '',  
+        productStatus: '',
+        //ProduktCategory ustawic jeszcze
+        productCategory: 0,
         imageUrl: '',
         restaurantId: '',
     });
-    
-  
+
+    const [newWaiter, setNewWaiter] = useState({
+        waiterName: '',
+        waiterSurname: '',
+        waiterLogin: '',
+        waiterPassw: '',
+    });
+
+
     const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
     const [deleteProductId, setDeleteProductId] = useState(null);
     const [isEditModalVisible, setIsEditModalVisible] = useState(false);
@@ -30,19 +53,158 @@ const AdminPage = ({route}) => {
     });
 
     useEffect(() => {
-        fetchData();
+        fetchProductData();
+        fetchWaiterData();
+        fetchTableData();
     }, []);
 
-    const fetchData = async () => {
+    const fetchProductData = async () => {
         try {
-
-            const response = await fetch(`${config.endpoints.Product}?restaurantId=${restaurantId}`);
+            console.log('Product Endpoint:', `${config.endpoints.Product}/restaurant/${restaurantId}`);
+            const response = await fetch(`${config.endpoints.Product}/restaurant/${restaurantId}`);
             const result = await response.json();
+            console.log('Product Data:', result);
             setApiData(result);
         } catch (error) {
             console.error('Błąd pobierania danych z API:', error);
         }
     };
+
+    const fetchWaiterData = async () => {
+        try {
+            console.log(restaurantId);
+            const response = await fetch(`${config.endpoints.Waiter}/restaurant/${restaurantId}`);
+            const result = await response.json();
+            console.log('Waiter Data:', result);
+            setWaiterData(result);
+        } catch (error) {
+            console.error('Error fetching waiter data from API:', error);
+        }
+    };
+
+    const fetchTableData = async () => {
+        try {
+          const response = await fetch(`${config.endpoints.Table}/restaurant/${restaurantId}`);
+          const result = await response.json();
+          console.log('Table Data:', result);
+          setTableData(result);
+        } catch (error) {
+          console.error('Error fetching table data from API:', error);
+        }
+      };
+      
+
+
+
+    const handleAddTable = async () => {
+        try {
+            const updatedTable = {
+                tabId: newTable.tabId,
+                tabNum: newTable.tabNum,
+                tabStatus: newTable.tabStatus,
+                restaurantId: restaurantId,
+            };
+
+            const updateResponse = await fetch('http://localhost:5111/api/Table', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updatedTable),
+            });
+
+            if (updateResponse.status === 201) {
+                setIsAddTableModalVisible(false);
+                setNewTable({
+                    tabId: 0,
+                    tabNum: 0,
+                    tabStatus: true,
+                    restaurantId: restaurantId,
+                });
+                await fetchTableData();
+            } else {
+                console.error('Błąd podczas dodawania nowego stolika');
+            }
+        } catch (error) {
+            console.error('Błąd podczas dodawania nowego stolika:', error);
+        }
+    };
+
+    const handleDeleteTable = async (tableId) => {
+        try {
+          const response = await fetch(`${config.endpoints.Table}/${tableId}`, {
+            method: 'DELETE',
+          });
+    
+          if (response.status === 204) {
+            await fetchTableData();
+          } else {
+            console.error('Błąd podczas usuwania stolika');
+          }
+        } catch (error) {
+          console.error('Błąd podczas usuwania stolika:', error);
+        }
+      };
+
+
+
+    const handleDeleteWaiter = async (waiterId) => {
+        try {
+            const response = await fetch(`${config.endpoints.Waiter}/${waiterId}`, {
+                method: 'DELETE',
+            });
+
+            if (response.status === 204) {
+                await fetchWaiterData();
+            } else {
+                console.error('Błąd podczas usuwania kelnera');
+            }
+        } catch (error) {
+            console.error('Błąd podczas usuwania kelnera:', error);
+        }
+    };
+
+
+
+
+    const handleAddWaiter = async () => {
+        try {
+            console.log("Próba dodawania Waitera")
+            const updatedWaiter = {
+                waiterName: newWaiter.waiterName,
+                waiterSurname: newWaiter.waiterSurname,
+                waiterLogin: newWaiter.waiterLogin,
+                waiterPassw: newWaiter.waiterPassw,
+                restaurantId: restaurantId,
+            };
+
+            console.log(updatedWaiter);
+
+            const updateResponse = await fetch('http://localhost:5111/api/Waiter', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updatedWaiter),
+            });
+
+            if (updateResponse.status === 201) {
+                setIsAddWaiterModalVisible(false);
+                setNewWaiter({
+                    waiterName: '',
+                    waiterSurname: '',
+                    waiterLogin: '',
+                    waiterPassw: '',
+                });
+                fetchWaiterData();
+            } else {
+                console.error('Błąd podczas dodawania nowego kelnera');
+            }
+        } catch (error) {
+            console.error('Błąd podczas dodawania nowego kelnera:', error);
+        }
+    };
+
 
     const handleAddProduct = async () => {
         try {
@@ -55,16 +217,17 @@ const AdminPage = ({route}) => {
                 imageUrl: newProduct.imageUrl,
                 restaurantId: restaurantId,
             };
+
             console.log(updatedProduct);
-    
+
             const updateResponse = await fetch(config.endpoints.Product, {
-                method: 'POST',  
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(updatedProduct),
             });
-    
+
             if (updateResponse.status === 201) {
                 setIsAddModalVisible(false);
                 setNewProduct({
@@ -72,11 +235,11 @@ const AdminPage = ({route}) => {
                     productDescription: '',
                     productPrice: 0,
                     productStatus: '',
-                    productCategory: '',
+                    productCategory: 0,
                     imageUrl: '',
                     restaurantId: '',
                 });
-                fetchData();
+                await fetchProductData();
             } else {
                 console.error('Błąd podczas dodawania nowego produktu');
             }
@@ -84,23 +247,26 @@ const AdminPage = ({route}) => {
             console.error('Błąd podczas dodawania nowego produktu:', error);
         }
     };
-    
+
 
     const handleDeleteProduct = async () => {
         try {
             const response = await fetch(`${config.endpoints.Product}/${deleteProductId}`, {
                 method: 'DELETE',
             });
+            console.log("Usuniete id to: " + deleteProductId);
 
             if (response.status === 204) {
                 setIsDeleteModalVisible(false);
                 setDeleteProductId(null);
-                fetchData();
-            } else {
+                fetchProductData();
+            }
+            else {
                 console.error('Błąd podczas usuwania produktu');
             }
         } catch (error) {
             console.error('Błąd podczas usuwania produktu:', error);
+        } finally {
         }
     };
 
@@ -123,7 +289,7 @@ const AdminPage = ({route}) => {
                     productPrice: 0,
                     imageUrl: '',
                 });
-                fetchData();
+                fetchProductData();
             } else {
                 console.error('Błąd podczas edytowania produktu');
             }
@@ -158,17 +324,83 @@ const AdminPage = ({route}) => {
         </View>
     );
 
+
+    const renderWaiterItem = ({ item }) => (
+        <View style={AdminPageStyles.waiterItemContainer}>
+            <Text style={AdminPageStyles.waiterItemName}>{`ID: ${item.waiterId} - ${item.waiterName} ${item.waiterSurname}`}</Text>
+            <TouchableOpacity
+                style={AdminPageStyles.deleteButton}
+                onPress={() => {
+                    handleDeleteWaiter(item.waiterId);
+                }}
+            >
+                <Text style={AdminPageStyles.deleteButtonText}>Usuń</Text>
+            </TouchableOpacity>
+        </View>
+    );
+
+
+    const renderWaiterHeader = () => (
+        <View style={[AdminPageStyles.waiterHeaderContainer, AdminPageStyles.sectionContainer]}>
+            <Text style={AdminPageStyles.waiterHeaderText}>Wszyscy Kelnerzy</Text>
+        </View>
+    );
+
+    const renderTableItem = ({ item }) => (
+        <View style={AdminPageStyles.tableItemContainer}>
+          <Text style={AdminPageStyles.waiterHeaderText}>{`Table ID: ${item.tabId}, Table Number: ${item.tabNum}`}</Text>
+          <TouchableOpacity
+            style={AdminPageStyles.deleteButton}
+            onPress={() => {
+              //setIsDeleteModalVisible(true);              
+             handleDeleteTable(item.tabId);
+            }}
+          >
+            <Text style={AdminPageStyles.deleteButtonText}>Usuń</Text>
+          </TouchableOpacity>
+        </View>
+      );
+
+    const renderTableHeader = () => (
+        <View style={[AdminPageStyles.tableHeaderContainer, AdminPageStyles.sectionContainer]}>
+            <Text style={AdminPageStyles.tableHeaderText}>Wszystkie Stoliki</Text>
+        </View>
+    );
+
+
+
+
     return (
         <ImageBackground source={require('./photo/BG1.png')} style={[AdminPageStyles.container, { backgroundColor: 'rgba(255, 255, 255, 0.6)' }]}>
             {/* Sekcja z logiem i przyciskiem "Dodaj nowy produkt" */}
-            <View style={[AdminPageStyles.sectionContainer, { backgroundColor: '#FFD983'}]}>
+            <View style={[AdminPageStyles.sectionContainer, { backgroundColor: '#FFD983' }]}>
                 <Image source={require('./photo/logo.png')} style={[AdminPageStyles.logo, { marginBottom: 15 }]} />
                 <TouchableOpacity
-                    style={[AdminPageStyles.addButton, {margin: 15}]}
+                    style={[AdminPageStyles.addButton, { margin: 15 }]}
                     onPress={() => setIsAddModalVisible(true)}
                 >
                     <Text style={AdminPageStyles.addButtonText}>Dodaj nowy produkt</Text>
                 </TouchableOpacity>
+
+                {/* Dodaj Waitera Button */}
+                <TouchableOpacity
+                    style={[AdminPageStyles.addButton, { margin: 15 }]}
+                    onPress={() => setIsAddWaiterModalVisible(true)}
+                >
+                    <Text style={AdminPageStyles.addButtonText}>Dodaj Waitera</Text>
+                </TouchableOpacity>
+
+
+                {/* Add Table Button */}
+                <TouchableOpacity
+                    style={[AdminPageStyles.addButton, { margin: 15 }]}
+                    onPress={() => setIsAddTableModalVisible(true)}
+                >
+                    <Text style={AdminPageStyles.addButtonText}>Dodaj Stolik</Text>
+                </TouchableOpacity>
+
+
+
             </View>
 
             {/* Sekcja z menu produktów */}
@@ -179,6 +411,26 @@ const AdminPage = ({route}) => {
                     keyExtractor={(item) => item.productId.toString()}
                     renderItem={renderProductItem}
                     numColumns={4}
+                />
+            </View>
+
+            <View style={AdminPageStyles.sectionContainer}>
+
+                <FlatList
+                    ListHeaderComponent={renderWaiterHeader}
+                    data={waiterData}
+                    keyExtractor={(item) => item.waiterId.toString()}
+                    renderItem={renderWaiterItem}
+                />
+
+            </View>
+
+            <View style={AdminPageStyles.sectionContainer}>
+                {renderTableHeader()}
+                <FlatList
+                    data={tableData}
+                    keyExtractor={(item) => item.tabId.toString()}
+                    renderItem={renderTableItem}
                 />
             </View>
 
@@ -220,10 +472,10 @@ const AdminPage = ({route}) => {
                         onChangeText={(text) => setNewProduct({ ...newProduct, imageUrl: text })}
                     />
                     <TouchableOpacity
-                        style={[AdminPageStyles.modalButton, {backgroundColor: '#4CAF50'}]}
+                        style={[AdminPageStyles.modalButton, { backgroundColor: '#4CAF50' }]}
                         onPress={handleAddProduct}
                     >
-                        <Text style={[AdminPageStyles.modalButtonText, {backgroundColor: '#4CAF50'}]}>Dodaj</Text>
+                        <Text style={[AdminPageStyles.modalButtonText, { backgroundColor: '#4CAF50' }]}>Dodaj</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={AdminPageStyles.modalButton}
@@ -232,7 +484,58 @@ const AdminPage = ({route}) => {
                         <Text style={AdminPageStyles.modalButtonText}>Anuluj</Text>
                     </TouchableOpacity>
                 </View>
+
             </Modal>
+
+            <Modal
+                visible={isAddWaiterModalVisible}
+                animationType="slide"
+                transparent={true}
+                onRequestClose={() => setIsAddWaiterModalVisible(false)}
+            >
+                <View style={AdminPageStyles.modalContainer}>
+                    <Text style={AdminPageStyles.modalHeader}>Dodaj nowego kelnera</Text>
+                    <TextInput
+                        style={AdminPageStyles.modalTextInput}
+                        placeholder="Imię kelnera"
+                        value={newWaiter.waiterName}
+                        onChangeText={(text) => setNewWaiter({ ...newWaiter, waiterName: text })}
+                    />
+                    <TextInput
+                        style={AdminPageStyles.modalTextInput}
+                        placeholder="Nazwisko kelnera"
+                        value={newWaiter.waiterSurname}
+                        onChangeText={(text) => setNewWaiter({ ...newWaiter, waiterSurname: text })}
+                    />
+                    <TextInput
+                        style={AdminPageStyles.modalTextInput}
+                        placeholder="Login kelnera"
+                        value={newWaiter.waiterLogin}
+                        onChangeText={(text) => setNewWaiter({ ...newWaiter, waiterLogin: text })}
+                    />
+                    <TextInput
+                        style={AdminPageStyles.modalTextInput}
+                        placeholder="Hasło kelnera"
+                        value={newWaiter.waiterPassw}
+                        onChangeText={(text) => setNewWaiter({ ...newWaiter, waiterPassw: text })}
+                        secureTextEntry={true}
+                    />
+                    <TouchableOpacity
+                        style={[AdminPageStyles.modalButton, { backgroundColor: '#4CAF50' }]}
+                        onPress={handleAddWaiter}
+                    >
+                        <Text style={[AdminPageStyles.modalButtonText, { backgroundColor: '#4CAF50' }]}>Dodaj Waitera</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={AdminPageStyles.modalButton}
+                        onPress={() => setIsAddWaiterModalVisible(false)}
+                    >
+                        <Text style={AdminPageStyles.modalButtonText}>Anuluj</Text>
+                    </TouchableOpacity>
+                </View>
+            </Modal>
+
+
 
             {/* Delete Product Modal */}
             <Modal
@@ -245,10 +548,10 @@ const AdminPage = ({route}) => {
                     <Text style={AdminPageStyles.modalHeader}>Potwierdzenie usunięcia</Text>
                     <Text style={{ padding: 10 }}>Czy na pewno chcesz usunąć ten produkt?</Text>
                     <TouchableOpacity
-                        style={[AdminPageStyles.modalButton, {backgroundColor: '#FF0000'}]}
+                        style={[AdminPageStyles.modalButton, { backgroundColor: '#FF0000' }]}
                         onPress={handleDeleteProduct}
                     >
-                        <Text style={[AdminPageStyles.modalButtonText, {backgroundColor: '#FF0000'}]}>Usuń</Text>
+                        <Text style={[AdminPageStyles.modalButtonText, { backgroundColor: '#FF0000' }]}>Usuń</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={AdminPageStyles.modalButton}
@@ -297,10 +600,10 @@ const AdminPage = ({route}) => {
                         onChangeText={(text) => setEditProduct({ ...editProduct, imageUrl: text })}
                     />
                     <TouchableOpacity
-                        style={[AdminPageStyles.modalButton, {backgroundColor: '#2196F3'}]}
+                        style={[AdminPageStyles.modalButton, { backgroundColor: '#2196F3' }]}
                         onPress={handleEditProduct}
                     >
-                        <Text style={[AdminPageStyles.modalButtonText, {backgroundColor: '#2196F3'}]}>Zapisz</Text>
+                        <Text style={[AdminPageStyles.modalButtonText, { backgroundColor: '#2196F3' }]}>Zapisz</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={AdminPageStyles.modalButton}
@@ -309,7 +612,47 @@ const AdminPage = ({route}) => {
                         <Text style={AdminPageStyles.modalButtonText}>Anuluj</Text>
                     </TouchableOpacity>
                 </View>
+
+
+
             </Modal>
+
+            {/* Add Table Modal */}
+            <Modal
+                visible={isAddTableModalVisible}
+                animationType="slide"
+                transparent={true}
+                onRequestClose={() => setIsAddTableModalVisible(false)}
+            >
+                <View style={AdminPageStyles.addTableModalContainer}>
+                    <View style={AdminPageStyles.addTableModalContent}>
+                        <Text style={AdminPageStyles.addTableModalHeader}>Dodaj nowy stolik</Text>
+                        <Text style={AdminPageStyles.addTableModalHeader}>Podaj numer stolika</Text>
+                        <TextInput
+                            style={AdminPageStyles.addTableModalTextInput}
+                            placeholder="Numer stolika"
+                            value={newTable.tabNum.toString()}
+                            onChangeText={(text) => setNewTable({ ...newTable, tabNum: text })}
+                            keyboardType="numeric"
+                        />
+                        <TouchableOpacity
+                            style={AdminPageStyles.addTableModalButton}
+                            onPress={handleAddTable}
+                        >
+                            <Text style={AdminPageStyles.addTableModalButtonText}>Dodaj stolik</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={AdminPageStyles.addTableModalButton}
+                            onPress={() => setIsAddTableModalVisible(false)}
+                        >
+                            <Text style={AdminPageStyles.addTableModalButtonText}>Anuluj</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
+
+
+
         </ImageBackground>
     );
 };

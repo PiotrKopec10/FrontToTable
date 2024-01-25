@@ -192,6 +192,93 @@ const AdminPageStyles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
   },
+  waiterHeaderContainer: {
+    marginBottom: 16,
+  },
+  waiterHeaderText: {
+    fontSize: 18,
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  waiterItemContainer: {
+    flex: 1,
+    margin: 8,
+    padding: 16,
+    borderWidth: 2,
+    borderRadius: 8,
+    alignItems: 'center',
+    borderColor: '#FFFFFF',
+    backgroundColor: 'rgba(255, 217, 131, 0.2)',
+  },
+  waiterItemName: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 8,
+    color: 'white', 
+  },
+  addTableModalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+  },
+  addTableModalContent: {
+    width: '80%',
+    padding: 16,
+    backgroundColor: '#FFD983', 
+    borderRadius: 8,
+    elevation: 5,
+    alignItems: 'center',
+  },
+  addTableModalHeader: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 16,
+    textAlign: 'center',
+    color: '#171716', 
+  },
+  addTableModalTextInput: {
+    width: '100%',
+    padding: 12,
+    borderWidth: 1,
+    borderRadius: 8,
+    marginBottom: 16,
+    textAlign: 'center',
+    backgroundColor: 'rgba(25, 15, 30, 0.3)',
+    color: 'white', 
+  },
+  addTableModalButton: {
+    backgroundColor: '#171716',
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 8,
+  },
+  addTableModalButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  tableItemContainer: {
+    flex: 1,
+    margin: 8,
+    padding: 16,
+    borderWidth: 2,
+    borderRadius: 8,
+    alignItems: 'center',
+    borderColor: '#FFFFFF',
+    backgroundColor: 'rgba(255, 217, 131, 0.2)',
+  },
+  tableHeaderContainer: {
+    marginBottom: 16,
+  },
+  tableHeaderText: {
+    fontSize: 18,
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  
 });
 
 export default AdminPageStyles;

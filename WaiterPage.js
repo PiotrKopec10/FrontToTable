@@ -150,6 +150,7 @@ const WaiterPage = ({ route }) => {
         return (
             <View style={WaiterPageStyles.orderItemContainer}>
                 <Text>{`Order ID: ${item.orderId}`}</Text>
+                <Text>{`Waiter ID: ${item.waiterId}`}</Text>
                 <Text>{`Order Time: ${formattedOrderDate}`}</Text>
                 <Text>{`Order Comment: ${item.orderComment}`}</Text>
                 <Text>{`Payment Method: ${item.paymentMethod}`}</Text>
