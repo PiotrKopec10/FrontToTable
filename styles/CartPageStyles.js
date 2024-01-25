@@ -167,7 +167,6 @@ const CartPageStyles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: 5,
-    paddingLeft: 80,
   },
   quantityInput: {
     width: 40,
@@ -188,7 +187,6 @@ const CartPageStyles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 18,
   },
-  
 });
 
 export default CartPageStyles;

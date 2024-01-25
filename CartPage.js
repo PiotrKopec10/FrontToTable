@@ -63,6 +63,27 @@ const CartPage = ({ route, navigation }) => {
     const updatedCart = [...cartItems];
     updatedCart[itemIndex].itemQuantity = Math.max(1, newQuantity);  
     setCartItems(updatedCart);
+    console.log(updatedCart);
+
+
+
+  //   fetch('http://localhost:5111/api/order', {
+  //   method: 'PUT',
+  //   headers: {
+  //     'Content-Type': 'application/json',
+  //   },
+  //   body: JSON.stringify({
+  //     orderId: 0,
+  //     orderTime: "2024-01-21T20:39:47.930Z",
+  //     orderStatus: 0,
+  //     orderComment: "",
+  //     paymentMethod: "",
+  //     waiterId: null,
+  //     tableId: tableId,
+  //     restaurantId: restaurantId
+  //   }),
+  // })
+
   };
 
   const renderPaymentConfirmationModal = () => (
