@@ -49,11 +49,11 @@ useEffect(() => {
                         throw new Error('Błąd aktualizacji danych restauracji');
                       }
                       return response.text();
-                    }) ;
+                    }) 
+                    
+                    setIsEditLoginModalVisible(false);
   };
-
     const [restaurantLoginInfo, setRestaurantLoginInfo] = useState([]);
-
     const [newTable, setNewTable] = useState({
         tabId: 0,
         tabNum: 0,
@@ -89,6 +89,7 @@ useEffect(() => {
         productName: '',
         productDescription: '',
         productPrice: 0,
+        productCategory: 0,
         imageUrl: '',
     });
 
@@ -518,6 +519,14 @@ useEffect(() => {
                         value={newProduct.imageUrl}
                         onChangeText={(text) => setNewProduct({ ...newProduct, imageUrl: text })}
                     />
+                     <TextInput
+                        style={AdminPageStyles.modalTextInput}
+                        value={newProduct.productCategory}
+                        onChangeText={(text) => setNewProduct({ ...newProduct, productCategory: text })}
+                    />
+                    <Text style={[AdminPageStyles.categoryText, {marginBottom: 10}]}>
+                    Kategoria(0-DaniaGłówne, 1-Zupy, 2-Przystawki, 3-Napoje, 4-Dodatki)
+                    </Text>
                     <TouchableOpacity
                         style={[AdminPageStyles.modalButton, { backgroundColor: '#4CAF50' }]}
                         onPress={handleAddProduct}
@@ -646,6 +655,14 @@ useEffect(() => {
                         value={editProduct.imageUrl}
                         onChangeText={(text) => setEditProduct({ ...editProduct, imageUrl: text })}
                     />
+                     <TextInput
+                        style={AdminPageStyles.modalTextInput}
+                        value={editProduct.productCategory}
+                        onChangeText={(text) => setEditProduct({ ...editProduct, productCategory: text })}
+                    />
+                    <Text style={[AdminPageStyles.categoryText, {marginBottom: 10}]}>
+                    Kategoria(0-DaniaGłówne, 1-Zupy, 2-Przystawki, 3-Napoje, 4-Dodatki)
+                    </Text>
                     <TouchableOpacity
                         style={[AdminPageStyles.modalButton, { backgroundColor: '#2196F3' }]}
                         onPress={handleEditProduct}
