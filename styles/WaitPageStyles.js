@@ -17,7 +17,6 @@ const WaitPageStyles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: 'bold',
   },
-
 });
 
 export default WaitPageStyles;

@@ -197,7 +197,7 @@ const WaiterPage = ({ route }) => {
 
     return (
         <View style={{ flex: 1 }}>
-            <ImageBackground source={require('./photo/BG1.png')} style={{ flex: 1, resizeMode: 'cover' }}>
+            <ImageBackground source={require('./photo/BG1.png')} style={{ flex: 1}}>
                 <FlatList
                     data={orders.filter(item => item.orderStatus === 0 || item.orderStatus === 1)}
                     keyExtractor={(item) => item.orderId.toString()}

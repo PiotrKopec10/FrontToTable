@@ -92,7 +92,6 @@ const CartPage = ({ route, navigation }) => {
         console.log(data);
         const updatedOrderData = { ...data, paymentMethod:paymentMethod };
         console.log(updatedOrderData);
-        // Send a PUT request to update the order with the modified data
         fetch(`http://localhost:5111/api/Order/${orderId}`, {
           method: 'PUT',
           headers: {
@@ -138,7 +137,6 @@ fetch(`http://localhost:5111/api/Order/${orderId}`, {
     return response.json();
   })
   .then(data => {
-    // Assuming you have a state variable orderData to store the fetched order data
     setOrderData(data);
 console.log(data);
     const updatedOrderData = { ...data, orderComment:orderNote };
@@ -211,7 +209,6 @@ console.log(data);
   const handlePaymentConfirmation = () => {
     setIsPaymentConfirmationModalVisible(false);
   handlePickPayment(selectedPaymentMethod);
-    // Przykładowa logika potwierdzenia płatności
     console.log(`Potwierdzono płatność metodą: ${selectedPaymentMethod}`);
     console.log(`Kwota do zapłacenia: ${calculateTotal()}`);
 

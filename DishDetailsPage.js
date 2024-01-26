@@ -47,21 +47,6 @@ const DishDetails = ({ route, navigation }) => {
     navigation.navigate('Order', { orderId: orderId });
   };
 
-   
-
-  // const addToCart = (product) => {
-  //   const existingItem = cartItems.find((item) => item.id === product.id);
-  //   if (existingItem) {
-  //     setCartItems(
-  //       cartItems.map((item) =>
-  //         item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
-  //       )
-  //     );
-  //   } else {
-  //     setCartItems([...cartItems, { ...product, quantity: 1 }]);
-  //   }
-  // };
-
   const getTotalCartItems = async (orderId) => {
     try {
       const response = await fetch(`http://localhost:5111/api/OrderItem/AllItems?orderId=${orderId}`);
@@ -74,7 +59,6 @@ const DishDetails = ({ route, navigation }) => {
       setTotalCartItems(totalItems);
     } catch (error) {
       console.error('Error fetching order items:', error);
-      // Handle the error or return a default value
       setTotalCartItems(0);
     }
   };
@@ -82,7 +66,6 @@ const DishDetails = ({ route, navigation }) => {
 
     const [numberInput, setNumberInput] = useState('');
     const handleTextChange = (text) => {
-      // Allow only numeric input
       const numericInput = text.replace(/[^0-9]/g, '');
       setNumberInput(numericInput);
     };
@@ -96,7 +79,6 @@ const DishDetails = ({ route, navigation }) => {
         return;
       }
       alert("Pomyślnie dodano do koszyka");
-      // Wywołanie POST na endpoint /api/OrderItem/ProductToOrder
       const response = await fetch('http://localhost:5111/api/OrderItem/Post', {
         method: 'POST',
         headers: {

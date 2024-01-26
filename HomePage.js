@@ -46,7 +46,6 @@ const HomePage = ({ route, navigation }) => {
           setRestaurantName(dane.restaurantName);
         });
 
-        // Fetch product data based on restaurantId
       } catch (error) {
         console.error('Error fetching data:', error);
       }

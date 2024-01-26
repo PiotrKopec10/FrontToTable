@@ -17,8 +17,6 @@ const DetailsWaiter = ({ route, navigation }) => {
     const [discount, setDiscount] = useState(0);
     const [discountInput, setDiscountInput] = useState('');
 
-
-
     useEffect(() => {
         const fetchOrderItems = async () => {
             try {

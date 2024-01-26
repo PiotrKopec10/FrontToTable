@@ -63,7 +63,6 @@ const handleLogin = () => {
         return response.json();
       })
       .then(data => {
-      //  console.log('Zalogowano jako waiter. Dane:', data);
 
         if (data.isAdmin) {
           navigation.navigate('AdminPage', { waiterId: data.waiterId, restaurantId: data.restaurantId });        
