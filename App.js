@@ -8,6 +8,7 @@ import DishDetailsPage from './DishDetailsPage';
 import AdminPage from './AdminPage';
 import WaitPage from './WaitPage'; 
 import WaiterPage from './WaiterPage'; 
+import DetailsWaiter from './DetailsWaiter.js';
 import { AuthProvider } from './AuthContext.js'; 
 
 const Stack = createStackNavigator();
@@ -23,6 +24,7 @@ const App = () => {
           <Stack.Screen name="DishDetails" component={DishDetailsPage} />
           <Stack.Screen name="AdminPage" component={AdminPage}/>
           <Stack.Screen name="WaiterPage" component={WaiterPage}/> 
+          <Stack.Screen name="DetailsWaiter" component={DetailsWaiter}/>
           <Stack.Screen name="Wait" component={WaitPage}/> 
         </Stack.Navigator>   
     </AuthProvider>

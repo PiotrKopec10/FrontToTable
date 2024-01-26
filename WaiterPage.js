@@ -173,7 +173,7 @@ const WaiterPage = ({ route }) => {
                     </TouchableOpacity>
 
                     {/* Add the "Szczegóły Zamówienia" button */}
-                    <TouchableOpacity onPress={() => navigation.navigate('WaiterDishDetails', { orderId: item.orderId, paymentMethod:item.paymentMethod })}>
+                    <TouchableOpacity onPress={() => navigation.navigate('DetailsWaiter', { orderId: item.orderId, paymentMethod:item.paymentMethod })}>
                         <View style={WaiterPageStyles.detailsButton}>
                             <Text style={WaiterPageStyles.detailsButtonText}>Szczegóły Zamówienia</Text>
                         </View>
