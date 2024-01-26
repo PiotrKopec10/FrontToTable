@@ -90,10 +90,12 @@ const DishDetails = ({ route, navigation }) => {
   const handleOrder = async () => {
     try {
       if (!orderId || !dishId) {
+       
         console.error('orderId or dishId is missing.');
         alert('Błąd podczas zamawiania. Spróbuj ponownie.');
         return;
       }
+      alert("Pomyślnie dodano do koszyka");
       // Wywołanie POST na endpoint /api/OrderItem/ProductToOrder
       const response = await fetch('http://localhost:5111/api/OrderItem/Post', {
         method: 'POST',

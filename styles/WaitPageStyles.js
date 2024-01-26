@@ -5,17 +5,19 @@ const WaitPageStyles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#f0f0f0',
   },
-  gifImage: {
-    width: 200,  // Dostosuj szerokość GIFa według potrzeb
-    height: 200, // Dostosuj wysokość GIFa według potrzeb
-    marginBottom: 20, // Dodatkowy odstęp od dołu
+  image: {
+    width: 100,
+    height: 100,
   },
   orderConfirmation: {
+    marginTop: 20,
     fontSize: 18,
-    fontWeight: 'bold', // Pogrubienie tekstu
     textAlign: 'center',
+    fontWeight: 'bold',
   },
+
 });
 
-export default WaitPageStyles; 
+export default WaitPageStyles;

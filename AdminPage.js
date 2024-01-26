@@ -11,45 +11,48 @@ const AdminPage = ({ route }) => {
     const [waiterData, setWaiterData] = useState([]);
     const [isAddTableModalVisible, setIsAddTableModalVisible] = useState(false);
     const [tableData, setTableData] = useState([]);
+    const [isEditLoginModalVisible, setIsEditLoginModalVisible] = useState(false);
 
-    const fetchRestaurantLoginInfo = async () => {
-        try {
-          
-           const response = await fetch(`${config.endpoints.Restaurant}/${restaurantId}`);
-           const result = await response.json();
-           setRestaurantLoginInfo(result);
-
-        } catch (error) {
-          console.error('Error fetching restaurant login info:', error);
-        }
-      };
-
-
-  const handleUpdateLoginInfo = async () => {
-    try {
-            const response = await fetch(`${config.endpoints.Restaurant}/${restaurantId}`, {
-            method: 'PUT',
+useEffect(() => {
+    const fetchRestaurantLoginInfo = () => {
+        fetch(`${config.endpoints.Restaurant}/${restaurantId}`,{
+            method: 'GET',
             headers: {
-                'Content-Type': 'application/json',
+              'accept': 'text/plain',
             },
-            body: JSON.stringify(restaurantLoginInfo),
+          }).then(response => {
+            if (!response.ok) {
+              throw new Error('Błąd logowania pobierania restaurantId');
+            }
+            return response.json();
+          })
+            .then(dane => {
+                console.log(dane);
+                    setRestaurantLoginInfo(dane);
+                 console.log(restaurantLoginInfo);
             });
+  };
+  fetchRestaurantLoginInfo();
+}, []);
 
-        if (response.status === 200) {
-        console.log('Login information updated successfully');
-      } else {
-         console.error('Failed to update login information');
-       }
-    } catch (error) {
-      console.error('Error updating login information:', error);
-    }
+  const handleUpdateLoginInfo =() => {
+            fetch(`${config.endpoints.Restaurant}/${restaurantId}`, 
+                {
+                    method: 'PUT',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(restaurantLoginInfo),
+                  })
+                    .then(response => {
+                      if (!response.ok) {
+                        throw new Error('Błąd aktualizacji danych restauracji');
+                      }
+                      return response.text();
+                    }) ;
   };
 
-    const [restaurantLoginInfo, setRestaurantLoginInfo] = useState({
-        restaurantName: '',
-        login: '',
-        password: '',
-    });
+    const [restaurantLoginInfo, setRestaurantLoginInfo] = useState([]);
 
     const [newTable, setNewTable] = useState({
         tabId: 0,
