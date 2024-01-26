@@ -1,6 +1,9 @@
 import { StyleSheet } from 'react-native';
 
 const DetailsWaiterStyles = StyleSheet.create({
+  container: {
+    backgroundColor: '#FFD983',
+  },
     discountInput: {
         height: 40,
         borderColor: 'gray',
@@ -9,7 +12,6 @@ const DetailsWaiterStyles = StyleSheet.create({
         paddingHorizontal: 10,
         fontSize: 16,
       },
-    
       discountButton: {
         backgroundColor: '#3498db',
         paddingVertical: 10,

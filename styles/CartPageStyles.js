@@ -4,6 +4,7 @@ const CartPageStyles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
+    backgroundColor: '#FFD983',
   },
   header: {
     fontSize: 20,
@@ -76,7 +77,7 @@ const CartPageStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',  
     width: '98%',
-    backgroundColor: '#DDDDDD',
+    backgroundColor: '#FF6666',
     borderRadius: 8,
     marginTop: 16,
     marginHorizontal: 10,

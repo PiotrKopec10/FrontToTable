@@ -43,6 +43,10 @@ const WaiterPage = ({ route }) => {
 
     useEffect(() => {
         fetchOrders();
+        const intervalId = setInterval(() => {
+            fetchOrders();
+          }, 1000);
+          return () => clearInterval(intervalId);
     }, [restaurantId]);
 
 
@@ -73,6 +77,7 @@ const WaiterPage = ({ route }) => {
                 tableId: currentOrderDetails.tableId,
                 restaurantId: restaurantId,
             };
+            
             console.log(updatedOrder);
             await fetch(`${config.endpoints.Order}/${orderId}`, {
                 method: 'PUT',
